@@ -1,0 +1,148 @@
+Case study: How Duolingo Utilises Gamification to Increase User Interest
+Jasmine Bilham's profile picture
+Jasmine Bilham
+July 2, 2021
+“We created Duolingo in 2011 with a mission to develop the best education in the world and make it universally available. I’ve always felt that economic inequality is one of the biggest problems facing humanity, and education is the best way to help most people around the world improve their lives. Our vision is to create a world where more money can’t buy you a better education.” -Luis von Ahn, CEO
+
+Duolingo has grown at an enormous scale, with over 500 million total users and around 40 million monthly active users, representing every country in the world. They offer 98 language courses that teach 39 different languages.
+
+One strategy that does keep Duolingo users coming back for more is their implementation of gamification. If you want to learn more about gamification itself, we have written an extensive blog post about this here. We’ll discuss how Duolingo embraces the trusty Gamification Octalysis Framework.
+
+Octalysis Framework
+The Octalysis framework, created by gamification guru Yu-kai Chou, essentially analyses the forces that drive human motivation and displays how these drives can be harnessed to build engaging and rewarding experiences for a user.
+
+A visual representation of the Octalysis Framework by Yukai Chou, mentioning all 8 Pillars. Epic Meaning and Calling, Development and Accomplishment, Empowerment of Creativity and Feedback, Ownership and Possession, Social Influence and Relatedness / Envy, Scarcity and Impatience, Unpredictability and Curiosity and Loss and Avoidance.
+Worded wonderfully by the creator himself, Gamification is “the craft of deriving all the fun and addicting elements found in games and applying them to real-world or productive activities. This is what I call ‘Human-Focused Design’ as opposed to the “Function-Focused Design.” – Yu-kai Chou.
+
+Epic Meaning and Calling
+According to the Octalysis Framework, Epic Meaning & Calling is the core drive where a player believes that he is doing something greater than himself or he was “chosen” to do something.
+
+Three iPhone notifications from Duolingo app.
+1. What does this word mean? Practice now!
+2. Time for Korean. You're 50% away from levelling up Basics 2
+3. Hi! It's Duo. Time for your daily Korean Lesson. Take 5 minutes now to complete it
+Take the above Duolingo notification examples. Duolingo is notorious for its constant (and almost over the top) notification bombardment. It has even become such a big meme sensation that Duolingo has written about their notification process in a blog post discussing ‘the AI behind the meme.’
+
+To some, these notifications might be a total hindrance, but to others, it’s that daily piece of encouragement / a friendly nudge to get back amongst their language learning. It aims to make the user feel valued and wanted on the platform, igniting a sense of ‘calling’ to the user. It can make you feel like you are not only contributing to your own language learning goals but contributing to the Duolingo community as a whole.
+
+Asana also asks for their user’s reason for cancellation, with an ability to select “Other” if they find the options non-applicable to their situation. The examples provided have quite a few options for the user to select, which is good because the more direct and specific the information is that you gather, the more you learn how to improve your services. You are never going to find out a reason without asking “Why?” It can be a daunting task, it can invalidate months and years of work on a particular feature that customers just aren’t a fan of, and it can mean extra work. But if constant iteration and improvement don’t occur from customer feedback, you’ll find yourselves with an inconsequential product.
+
+Development and Accomplishment
+Many products allow their users to feel a sense of getting closer to your goal. Achieving it can be provided by breaking your challenge into stages and showing your progress (points, gems, levels and more). Duolingo does not skip this vital step in the gamification process, celebrating every little win with its users. You will notice in the examples below that Duolingo’s iconic bright colours and playful illustrations are used in a positive manner to emphasise that something has been accomplished.
+
+The enthusiastic and positive tone of voice is very prominent amongst these examples as well, with plenty of exclamation marks sprinkled in, ensuring the user feels as accomplished as possible after their action.
+
+Screenshots from Duolingo - including:
+- celebration animations when a user answers the question correctly
+- a leaderboard where the user can see where they are placed
+- an encouraging message from Duo saying "You're acing this skill! You're ready to level up"
+-progress bars indicating on each learning unit to see where the user is up to
+They also provide levels of progression and rewards for accomplishment, including:
+
+Leaderboards and leagues: While these also fall under the Social Influence and Relatedness / Envy Pillar, being promoted or demoted to a particular level can ignite emotions within the user. Being promoted encourages the user to continue excelling, and being demoted encourages them to work even harder to get back to the level they were at. No one likes to be told that their skills are lessening.
+Experience points (XP): Experience points are used in a multitude of online games. It is a simple yet effective way to reward your users.
+Progress bars: Duolingo display a progress bar around each unit topic. This progress bar decreases the longer you leave that unit, as language learning requires constant practise and repetition. The user then feels obliged to revisit that unit to ‘top up’ their progress.
+Streaks: Streaks have become quite a popular tool on social applications, with Snapchat being a prime example. The longer your streak, the more exciting it is. And the more pressure there is not to break it. You are also rewarded if you can prolong your streak.
+These are strategically placed within the app to make sure that the user knows that they are progressing. Progression and positive reinforcement in turn lead the user to feel like they’re doing something pretty fantastic here, encouraging them to continue to use the platform.Each screen still allows the user to click “I’m not interested, continue to cancel” which is strategically designed as an outlined secondary button. The messages on each screen are written by members of the Pipedrive team with their names, positions, and profile image included at the top. This may seem small, but it adds a lovely, personal element to the cancellation process and takes on board the “show your support” approach.
+
+Empowerment of Creativity and Feedback
+Yu-kai Chou compares this part of gamification to building Lego blocks. A user is engaged in a creative process where they have to try different combinations. Users can then receive the feedback they crave, and be provided with the result of their creativity.
+
+Two screens. One where the user has answered a question wrong and a pop up comes up "Correct solution: answer." And a continue CTA
+The other is a Duolingo Plus advertisement stating "2 mistakes to practice" Try duolingo plus for 2 weeks free to practice your mistakes
+A Duolingo user will inevitably get some questions wrong during their time on the app. While being incorrect can sometimes be projected as something negative, Duolingo takes it as an opportunity to allow its users to learn and grow.
+
+In the first image, when a question is answered incorrectly, a red-coloured pop up appears at the bottom to indicate the incorrectness. Although red can be associated with a more negative / error-like tone, the simplistic design makes it a little less intimidating. This pop up allows you to continue, and it also allows you to flag an error on Duolingo’s behalf, or click the ‘speech bubble’ button and learn about the word further.
+
+The second image advertises Duolingo Plus. The page highlights that the user has made some mistakes in their questions, but that’s okay because Duolingo Plus is here to create a personalised lesson for you to hone in on any weak spots. This is an excellent example of how Duolingo manages to monetise the craving for feedback. If a user were interested in this feature, they would start their two week trial of Duolingo Plus, which would then transition into a paid monthly subscription.
+
+Ownership and Possession
+The Ownership and Possession Pillar is based on the principle that because you own something, you want to improve it, protect it, and get more of it. This pillar is often associated with elements such as virtual goods and currencies.
+
+Two Duolingo screenshots
+1. My profile - with my statistics, profile picture and friend suggestions
+2. The Duolingo shop - Where you can buy hearts, and attire for Duo (the duolingo owl)
+Above are screenshots of a Duolingo user profile and the Duolingo shop. Multiple components on this page utilise the Ownership and Possession Pillar, including:
+
+Profile picture: customisation allows the user to feel a closer connection to the product they are using. In this instance, my picture is a sunset photo, but you can add whatever image you wish, allowing users to feel more ownership or pride in their digital persona.
+Streak: As mentioned in the Development and Accomplishment Pillar, streaks can have an addictive effect and encourage their user to continue using the app so that they can continue to ‘own’ a high streak score.
+XP: Not only do they provide a sense of progression and accomplishment, but they also provide a sense of ownership from accumulating digital wealth.
+League: Whilst this falls under the category of development and accomplishment,
+Gems: The blue gems in the top right hand corner of the second image are Duolingo’s form of digital currency. Gems can be used to purchase items in the Shop. These include:’
+Heart refills – to increase your ‘lives’ when answering questions, so that you don’t have to worry about making mistakes.
+Outfits – emphasising that customisation aspect of Ownership and Possession, outfits are used on lots of online games to provide a sense of uniqueness and possession for the userYou can also buy gems with real money. If you don’t have enough gems on the game to purchase an item of your choice, you can always purchase more. This is also a common feature on a lot of online games / applications.
+All of these ownership and possession tactics combine seamlessly to provide a gamified and somewhat addictive experience for a dedicated Duolingo user.
+
+Social Influence and Relatedness / Envy
+“Social Influence and Relatedness is a Right Brain Core Drive that bases its success off the common, and sometimes inevitable human desire to connect and compare with one another. When utilised properly, it can serve as one of the strongest and long-lasting motivations for people to become connected and engaged.” – Yu-kai Chou.
+
+Social media utilises this tool as a primary drive for users to interact with their app. Whilst there can be positive aspects to social media, such as connecting with others and sharing your creativity and experiences. It also has some negative implications that are imminent due to human nature, such as judgement, negative comparison by putting others down and unhealthy levels of envy.
+
+Screenshots of Duolingo touching on their social side.
+1. Comparing your progress to someone you are friends with on Duolingo - a graph is displayed
+2. Friend suggestions and a list of your current friends
+3. League leaderboard
+Duolingo, whilst not a social media app, utilises the positive aspects of social influence. The app encourages you to invite friends (something that almost every app does nowadays), follow people, check out your friends’ progressions and your place on league leaderboards.
+
+These features allow an aspect of comparison to others on the app which can, when used effectively, encourage the user to continue using Duolingo or interact with it a little more in order to progress alongside their friends.
+
+Scarcity and Impatience
+There is a natural human tendency to want what we cannot have. Scarcity and impatience is the drive that motivates us simply because we cannot obtain something immediately, or because there is difficulty in obtaining it. This pillar can sometimes overlap into the Loss and Avoidance Pillar, where users do not want to lose progress or points in case they miss out on something amazing.
+
+Two Duolingo screens:
+1. News feed - where an article is there saying "Duolingo's exclusive club"
+2. Pop up notification stating "Race against the clock for bonus XP! Event ends in 21 hours"
+There are two screens above that are examples of this particular pillar. Delving into each one:
+
+“Duolingo’s exclusive club – Duolingo won’t let just anybody in” – this is a prime example of scarcity. The tone of voice is a prominent tactic in this section, with the term ‘exclusive’ sounding out of reach and desirable. The fact that they ‘won’t let just anybody in’ also makes the user think, “If I get into this exclusive club, then I must be special.”
+“XP Ramp Up Challenge – this event ends in 21 hours.” – Tapping into a couple of other pillars including Development and Accomplishment and Ownership and Possession, the desire to obtain more XP on this app is highly desirable. It allows you to feel a sense of progression and it also allows you to feel a sense of ownership over this XP. To add to these desirable features, Duolingo has added a time limit to the XP Ramp Up Challenge, so the users only have the next 21 hours to earn bonus XP.
+Whilst these are not the only examples on the application that displays the Scarcity and Impatience Tactic, it is evident that this strategy is implemented effectively to drag language learners further in.
+
+Unpredictability and Curiosity
+Unpredictability and Curiosity taps into the human desire to find out what happens next. According to Yu-kai Chou, our intellectual consciousness is inherently lazy, and if tasks at hand don’t demand immediate attention, the neocortex delegates the mental legwork to our subconscious mind, or “System 1” according to Economics Nobel Prize winner and psychologist Daniel Kahneman.
+
+The intellectual consciousness only wants to be disturbed when it is absolutely necessary, such as when a threat is present or when the brain encounters new information it hasn’t processed before. Pair a new piece of information with the human desire to explore, and you have this particular Gamification pillar.
+
+Duolingo taps into this pillar when trying to get users to progress to another level. When something is ‘locked’ there is a desire to view and progress to the unknown. In the middle image below, users are given the opportunity to spend some of their gems take a test to skip to the unknown level. Will it be so hard that you will not progress? Or, by chance will you succeed and progress further than before. It is a gamble that many users are willing to take.
+
+Duolingo screens displaying user progress and levels and displaying the ability to skip to another level for gem payment.
+Revisiting Duolingo’s paid tier, Duolingo Plus, the below screens are another example of the unknown for a user who is on the free tier. Whilst the benefits are not necessarily ‘unknown,’ they certainly ignite some level of curiosity, a desire to explore these fancy premium features. Iconography and a mature change of colour add a visual level of sophistication, drawing the user in further.
+
+Duolingo Plus Advertisement Overlay
+- displays a list of benefits to upgrading
+- dark blue colour for mature / premium approach
+And as a result, as long as there is a chance of reaping benefits, new features or rewards of progression or accomplishment, people are willing to invest small amounts of Duolingo’s digital currency to obtain a gigantic reward.
+
+Loss and Avoidance
+The Loss and Avoidance Pillar is simply motivating through the fear of losing something or having undesirable events transpire. It goes hand in hand with Ownership and Possession, where something you once earned could be taken away from you.
+
+The primary example in Duolingo’s product is the use of the Streak feature. Although this has been touched on in the previous pillars, one core drive for withholding your streak is the fear of losing it.
+
+Duolingo screens celebrating a user's 365 day streak.
+It helps that throughout a user’s journey on the app, positive affirmations and visual celebrations are included when a streak milestone is reached – as you can see in the examples above. This adds to the user’s excitement and pride in their streak.
+
+So when a notification buzzes on a user’s phone, like the one below, panic can set in. In fear of losing this impressive streak, the user will feel more inclined to hop onto Duolingo’s app and reach their daily goal. Using the word ‘alive’ is also strategic as it adds a human factor to the streak itself, adding an element of desperation and igniting emotions within the user, even if they don’t realise it.
+
+Duolingo notification warning that the user's streak is in danger.
+Duolingo even takes it to another level – capitalising off this fear of loss. You will notice in the example below that Duolingo can miraculously recover your streak at a small fee. For some, $4.99 could be considered worthwhile, as long as it meant that their beloved streak would return in full force.
+
+Duolingo overlay notifying user that their streak has been lost - and that they can pay $4.99 to recover it.
+Duolingo seeps with this pillar, igniting that primal desire to avoid losing something of value.
+
+Satisfying Different Types of Duolingo Players
+An important point to consider when designing a platform that utilises gamification is the fact that no person is the same. People will use your platform for different reasons and in turn have different motives. This means that there will be different player types. Richard A. Bartle, professor and game researcher, classified common player characteristics into 4 different player types: Achievers, Explorers, Socialisers, and Killers.
+
+So, how does Duolingo satisfy each type of player?
+
+Duolingo’s game mechanics (that have been touched on above in the Pillars) are targeted at certain types of users and can trigger them in different ways.
+
+Achievers focus on points, badges, and statuses, thus, Duolingo targets them with level points, XP points, leaderboard places, and leagues. The progress you achieve is visible to other members of the platform and gives achievers a chance to show off their achievements.
+
+For Explorers who are more focused on delving into new areas and don’t care a lot about points, the app offers new levels and categories to unlock with each completed level.
+
+For the Socialisers who are eager to collaborate and achieve goals with friends and other users, Duolingo allow users to follow and track the progress of other learners and their friends.
+
+The Killers (a smaller group compare to others – about 1%) are quite similar to achievers as they are motivated to earn points and progress, but they focus more on Winning and seeing others Lose. That’s where a leaderboard of sorts comes in handy. They yearn to win and are satisfied by the special values for the first three places on the leaderboard. People who don’t take the first 10 places are demoted to the previous league, which touches on that desire to see others lose.
+
+Wrap Up
+Duolingo have managed to pave quite a solid foundation for crafting a truly engaging, player-centered design. Utilising all eight pillars of the Octalysis Framework, Duolingo provides a sense of purpose, challenge, clear feedback along the way and creates a fun, voluntary way to learn for hose busy language learners out there.
