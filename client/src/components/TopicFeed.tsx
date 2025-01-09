@@ -23,8 +23,6 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
   const handleDoubleTap = (topicId: string, e: React.MouseEvent) => {
     if (e.detail === 2) {
       toggleLike(topicId);
-      const target = e.currentTarget as HTMLElement;
-      target.click();
     }
   };
 
@@ -33,12 +31,17 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
     setLocation(`/story/${topicId}`);
   };
 
+  const handleLikeClick = (topicId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleLike(topicId);
+  };
+
   return (
     <div className="flex flex-col gap-4 max-w-md mx-auto">
       {topics.map((topic) => (
         <Card
           key={topic.id}
-          className="cursor-pointer hover:opacity-90 transition-opacity overflow-hidden"
+          className="cursor-pointer overflow-hidden"
           onClick={(e) => {
             handleDoubleTap(topic.id, e);
             if (e.detail === 1) {
@@ -53,7 +56,7 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
                   <img
                     src={topic.imageUrl}
                     alt={topic.title}
-                    className="w-full h-full object-cover rounded-t-lg"
+                    className="w-full h-full object-cover"
                     onError={() => handleImageError(topic.id)}
                     loading="lazy"
                   />
@@ -65,45 +68,60 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
                 )}
               </div>
             )}
-            <div className="p-4 flex items-center gap-4">
-              {compact && (
-                <div className="w-16 h-16 overflow-hidden rounded-lg">
-                  {topic.imageUrl && !failedImages.has(topic.id) ? (
-                    <img
-                      src={topic.imageUrl}
-                      alt={topic.title}
-                      className="w-full h-full object-cover"
-                      onError={() => handleImageError(topic.id)}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <ImageFallback title={topic.title} />
-                  )}
-                </div>
-              )}
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <h3 className="font-semibold text-lg">{topic.title}</h3>
-                  <div className="flex items-center gap-3">
-                    <button 
-                      className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
-                      onClick={(e) => handleChatClick(topic.id, e)}
-                    >
-                      <MessageCircle className="w-4 h-4 mr-1" />
-                      {getMessageCount(topic.id)}
-                    </button>
-                    <button className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
-                      <Heart 
-                        className={cn(
-                          "w-4 h-4 mr-1",
-                          getLikes(topic.id) > 0 && "fill-current text-red-500"
-                        )}
+
+            {/* Instagram-style interaction buttons */}
+            <div className="p-3">
+              <div className="flex items-center gap-4 mb-2">
+                <button 
+                  onClick={(e) => handleLikeClick(topic.id, e)}
+                  className="hover:opacity-70 transition-opacity"
+                >
+                  <Heart 
+                    className={cn(
+                      "w-6 h-6",
+                      getLikes(topic.id) > 0 ? "fill-red-500 text-red-500" : "text-foreground"
+                    )}
+                  />
+                </button>
+                <button 
+                  onClick={(e) => handleChatClick(topic.id, e)}
+                  className="hover:opacity-70 transition-opacity"
+                >
+                  <MessageCircle className="w-6 h-6 text-foreground" />
+                </button>
+              </div>
+
+              {/* Like count */}
+              <div className="text-sm font-semibold mb-1">
+                {getLikes(topic.id)} likes
+              </div>
+
+              {/* Content */}
+              <div className="flex items-start gap-3">
+                {compact && (
+                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                    {topic.imageUrl && !failedImages.has(topic.id) ? (
+                      <img
+                        src={topic.imageUrl}
+                        alt={topic.title}
+                        className="w-full h-full object-cover"
+                        onError={() => handleImageError(topic.id)}
+                        loading="lazy"
                       />
-                      {getLikes(topic.id)}
-                    </button>
+                    ) : (
+                      <ImageFallback title={topic.title} />
+                    )}
                   </div>
+                )}
+                <div className="flex-1">
+                  <h3 className="font-semibold">{topic.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {topic.description}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {getMessageCount(topic.id)} questions
+                  </p>
                 </div>
-                <p className="text-sm text-gray-600">{topic.description}</p>
               </div>
             </div>
           </CardContent>
