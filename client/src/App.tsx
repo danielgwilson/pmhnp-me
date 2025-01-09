@@ -6,21 +6,24 @@ import { Navigation } from "@/components/layout/Navigation";
 import { TopicStory } from "@/components/TopicStory";
 import { mockTopics } from "@/data/topics";
 import { ToastManager } from "@/components/AchievementToast";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
   return (
     <>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/search" component={Search} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/story/:id">
-          {(params) => {
-            const topic = mockTopics.find((t) => t.id === params.id);
-            return topic ? <TopicStory topic={topic} /> : null;
-          }}
-        </Route>
-      </Switch>
+      <AnimatePresence mode="wait">
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/search" component={Search} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/story/:id">
+            {(params) => {
+              const topic = mockTopics.find((t) => t.id === params.id);
+              return topic ? <TopicStory topic={topic} /> : null;
+            }}
+          </Route>
+        </Switch>
+      </AnimatePresence>
       <Navigation />
       <ToastManager />
     </>

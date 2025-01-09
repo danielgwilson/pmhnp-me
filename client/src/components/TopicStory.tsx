@@ -23,6 +23,7 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
   const [showChat, setShowChat] = useState(false);
   const [likeCount, setLikeCount] = useState(getLikes(topic.id));
   const [messageCount, setMessageCount] = useState(getMessageCount(topic.id));
+  const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
     addToHistory(topic.id);
@@ -38,8 +39,16 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
     if (currentSlide < topic.slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
-      setLocation('/');
+      handleClose();
     }
+  };
+
+  const handleClose = () => {
+    setIsExiting(true);
+    // Use history.back() to avoid re-rendering the feed
+    setTimeout(() => {
+      window.history.back();
+    }, 150); // Match the exit animation duration
   };
 
   const handleTap = (e: React.MouseEvent) => {
@@ -70,98 +79,96 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
   };
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        className="fixed inset-0 bg-black text-white"
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        transition={{ duration: 0.15 }}
-        style={{ zIndex: 50 }}
-      >
-        <div className="h-full flex flex-col">
-          <div className="p-4 flex justify-between items-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white hover:text-white hover:bg-white/20"
-              onClick={() => setLocation('/')}
-            >
-              <X className="h-6 w-6" />
-            </Button>
-            <h2 className="text-lg font-semibold max-w-xs text-center mx-auto">{topic.title}</h2>
-            <div className="w-6" />
-          </div>
-
-          <StoryProgress
-            total={topic.slides.length}
-            current={currentSlide}
-            onComplete={handleProgressComplete}
-          />
-
-          <div
-            className="flex-1 relative"
-            onClick={handleTap}
+    <motion.div
+      className="fixed inset-0 bg-black text-white"
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.95, opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      style={{ zIndex: 50 }}
+    >
+      <div className="h-full flex flex-col">
+        <div className="p-4 flex justify-between items-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white hover:text-white hover:bg-white/20"
+            onClick={handleClose}
           >
-            <div className="absolute inset-0 flex items-center justify-center p-8">
-              <p className="text-lg text-center">
-                {topic.slides[currentSlide].content}
-              </p>
-            </div>
+            <X className="h-6 w-6" />
+          </Button>
+          <h2 className="text-lg font-semibold max-w-xs text-center mx-auto">{topic.title}</h2>
+          <div className="w-6" />
+        </div>
+
+        <StoryProgress
+          total={topic.slides.length}
+          current={currentSlide}
+          onComplete={handleProgressComplete}
+        />
+
+        <div
+          className="flex-1 relative"
+          onClick={handleTap}
+        >
+          <div className="absolute inset-0 flex items-center justify-center p-8">
+            <p className="text-lg text-center">
+              {topic.slides[currentSlide].content}
+            </p>
           </div>
+        </div>
 
-          <div className="border-t border-white/10">
-            <div className="flex items-center gap-4 p-4">
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={handleLikeClick}
-                  className="hover:opacity-70 transition-opacity"
-                >
-                  <Heart 
-                    className={cn(
-                      "w-6 h-6 text-white",
-                      likeCount > 0 ? "fill-red-500" : "fill-none"
-                    )}
-                  />
-                </button>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowChat(true);
-                  }}
-                  className="hover:opacity-70 transition-opacity"
-                >
-                  <MessageCircle className="w-6 h-6 text-white" />
-                </button>
-              </div>
-            </div>
-
-            <div className="px-4 pb-2">
-              <div className="text-sm font-semibold text-white mb-2">
-                {likeCount} likes · {messageCount} questions
-              </div>
-            </div>
-
-            <div className="p-4 pt-0">
-              <Input
-                className="w-full bg-transparent border-white/20 text-white placeholder:text-gray-400"
-                placeholder="Ask a question about this topic..."
+        <div className="border-t border-white/10">
+          <div className="flex items-center gap-4 p-4">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={handleLikeClick}
+                className="hover:opacity-70 transition-opacity"
+              >
+                <Heart 
+                  className={cn(
+                    "w-6 h-6 text-white",
+                    likeCount > 0 ? "fill-red-500" : "fill-none"
+                  )}
+                />
+              </button>
+              <button 
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowChat(true);
                 }}
-              />
+                className="hover:opacity-70 transition-opacity"
+              >
+                <MessageCircle className="w-6 h-6 text-white" />
+              </button>
             </div>
           </div>
-        </div>
 
-        <StoryChat
-          topicId={topic.id}
-          isOpen={showChat}
-          onClose={() => setShowChat(false)}
-          onSubmit={handleChatSubmit}
-        />
-      </motion.div>
-    </AnimatePresence>
+          <div className="px-4 pb-2">
+            <div className="text-sm font-semibold text-white mb-2">
+              {likeCount} likes · {messageCount} questions
+            </div>
+          </div>
+
+          <div className="p-4 pt-0">
+            <Input
+              className="w-full bg-transparent border-white/20 text-white placeholder:text-gray-400"
+              placeholder="Ask a question about this topic..."
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowChat(true);
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <StoryChat
+        topicId={topic.id}
+        isOpen={showChat}
+        onClose={() => setShowChat(false)}
+        onSubmit={handleChatSubmit}
+      />
+    </motion.div>
   );
 };
