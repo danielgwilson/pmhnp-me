@@ -10,6 +10,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { updateDailyProgress, updateStreak, checkAndUnlockAchievements } from '@/lib/gamification';
 import { showAchievementToast } from '@/components/AchievementToast';
+import { Heart, MessageCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface TopicStoryProps {
   topic: Topic;
@@ -58,6 +60,18 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
     });
   };
 
+  //Dummy functions - replace with actual implementation
+  const getLikes = (topicId: string) => 4; //Replace with actual like count retrieval
+  const getMessageCount = (topicId: string) => 0; //Replace with actual message count retrieval
+  const handleLikeClick = (topicId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Like clicked for topic:", topicId);
+  };
+  const handleChatClick = (topicId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Chat clicked for topic:", topicId);
+  };
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -100,26 +114,35 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
           </div>
 
           <div className="border-t border-white/10">
-            <div className="flex items-center gap-4 px-4 py-2">
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon" className="text-white hover:text-white hover:bg-white/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                  </svg>
-                  <span className="ml-1 text-sm">4</span>
-                </Button>
-              </div>
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon" className="text-white hover:text-white hover:bg-white/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
-                  </svg>
-                  <span className="ml-1 text-sm">0</span>
-                </Button>
+            <div className="flex items-center gap-4 p-4">
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={(e) => handleLikeClick(topic.id, e)}
+                  className="hover:opacity-70 transition-opacity"
+                >
+                  <Heart 
+                    className={cn(
+                      "w-6 h-6 text-white",
+                      getLikes(topic.id) > 0 ? "fill-red-500" : "fill-none"
+                    )}
+                  />
+                </button>
+                <button 
+                  onClick={(e) => handleChatClick(topic.id, e)}
+                  className="hover:opacity-70 transition-opacity"
+                >
+                  <MessageCircle className="w-6 h-6 text-white" />
+                </button>
               </div>
             </div>
 
-            <div className="p-4 pt-2">
+            <div className="px-4 pb-2">
+              <div className="text-sm font-semibold text-white mb-2">
+                {getLikes(topic.id)} likes · {getMessageCount(topic.id)} questions
+              </div>
+            </div>
+
+            <div className="p-4 pt-0">
               <Input
                 className="w-full bg-transparent border-white/20 text-white placeholder:text-gray-400"
                 placeholder="Ask a question about this topic..."
