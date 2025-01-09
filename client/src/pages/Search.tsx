@@ -108,19 +108,19 @@ export const Search: FC = () => {
                     >
                       <CardContent className="p-4">
                         <div className="aspect-video mb-2 relative bg-muted rounded-lg overflow-hidden">
-                          <img
-                            src={topic.imageUrl}
-                            alt={topic.title}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              const fallback = e.currentTarget.parentElement;
-                              if (fallback) {
-                                fallback.classList.add('flex', 'items-center', 'justify-center');
-                                fallback.innerHTML = `<span class="text-2xl font-medium text-muted-foreground">${topic.title.slice(0, 2).toUpperCase()}</span>`;
-                              }
-                            }}
-                          />
+                          {topic.imageUrl ? (
+                            <img
+                              src={topic.imageUrl}
+                              alt={topic.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <span className="text-2xl font-semibold text-muted-foreground">
+                                {topic.title.slice(0, 2).toUpperCase()}
+                              </span>
+                            </div>
+                          )}
                         </div>
                         <h3 className="font-medium truncate">{topic.title}</h3>
                         <p className="text-sm text-muted-foreground truncate">
@@ -136,10 +136,10 @@ export const Search: FC = () => {
               {/* Desktop Navigation */}
               <div className="hidden md:block">
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   size="icon"
                   className={cn(
-                    "absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
+                    "absolute -left-4 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
                     !chevronStates[index]?.left && "hidden"
                   )}
                   onClick={() => scroll(index, 'left')}
@@ -147,10 +147,10 @@ export const Search: FC = () => {
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   size="icon"
                   className={cn(
-                    "absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
+                    "absolute -right-4 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
                     !chevronStates[index]?.right && "hidden"
                   )}
                   onClick={() => scroll(index, 'right')}

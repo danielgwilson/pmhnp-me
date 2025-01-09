@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import { Progress } from '@/components/ui/progress';
 
 interface StoryProgressProps {
@@ -9,16 +9,22 @@ interface StoryProgressProps {
 
 export const StoryProgress: FC<StoryProgressProps> = ({ total, current, onComplete }) => {
   const [progress, setProgress] = useState(0);
+  const completedRef = useRef(false);
 
   useEffect(() => {
-    setProgress(0); // Reset progress when current changes
+    setProgress(0);
+    completedRef.current = false;
 
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
-          if (onComplete) {
-            onComplete();
+          if (!completedRef.current) {
+            completedRef.current = true;
+            // Schedule onComplete callback to avoid state updates during render
+            if (onComplete) {
+              setTimeout(onComplete, 0);
+            }
           }
           return 100;
         }
@@ -26,7 +32,10 @@ export const StoryProgress: FC<StoryProgressProps> = ({ total, current, onComple
       });
     }, 50);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      completedRef.current = false;
+    };
   }, [current, onComplete]);
 
   return (

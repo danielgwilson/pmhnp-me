@@ -34,7 +34,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
     const ref = scrollRef.current;
     if (ref) {
       ref.addEventListener('scroll', handleScroll);
-      handleScroll(); // Initial check
+      handleScroll();
       return () => ref.removeEventListener('scroll', handleScroll);
     }
   }, []);
@@ -55,8 +55,10 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
             <div className="rounded-full p-1.5 bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500">
               <Avatar className="w-16 h-16 border-2 border-white">
                 <AvatarImage src={topic.imageUrl} alt={topic.title} />
-                <AvatarFallback className="bg-muted text-muted-foreground font-medium">
-                  {topic.title.slice(0, 2).toUpperCase()}
+                <AvatarFallback className="bg-muted flex items-center justify-center">
+                  <span className="text-lg font-semibold text-muted-foreground">
+                    {topic.title.slice(0, 2).toUpperCase()}
+                  </span>
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -70,10 +72,10 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
       {/* Desktop Navigation */}
       <div className="hidden md:block">
         <Button
-          variant="ghost"
+          variant="secondary"
           size="icon"
           className={cn(
-            "absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
+            "absolute -left-4 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
             !showLeftChevron && "hidden"
           )}
           onClick={() => scroll('left')}
@@ -81,10 +83,10 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
           <ChevronLeft className="h-6 w-6" />
         </Button>
         <Button
-          variant="ghost"
+          variant="secondary"
           size="icon"
           className={cn(
-            "absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
+            "absolute -right-4 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
             !showRightChevron && "hidden"
           )}
           onClick={() => scroll('right')}
