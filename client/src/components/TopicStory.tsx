@@ -5,7 +5,7 @@ import { StoryProgress } from './StoryProgress';
 import { StoryChat } from './StoryChat';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
-import { addToHistory } from '@/lib/storage';
+import { addToHistory, getLikes, toggleLike, getMessageCount } from '@/lib/storage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { updateDailyProgress, updateStreak, checkAndUnlockAchievements } from '@/lib/gamification';
@@ -21,6 +21,8 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [_, setLocation] = useLocation();
   const [showChat, setShowChat] = useState(false);
+  const [likeCount, setLikeCount] = useState(getLikes(topic.id));
+  const [messageCount, setMessageCount] = useState(getMessageCount(topic.id));
 
   useEffect(() => {
     addToHistory(topic.id);
@@ -58,18 +60,13 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
     newAchievements.forEach(achievement => {
       showAchievementToast(achievement);
     });
+    setMessageCount(getMessageCount(topic.id));
   };
 
-  //Dummy functions - replace with actual implementation
-  const getLikes = (topicId: string) => 4; //Replace with actual like count retrieval
-  const getMessageCount = (topicId: string) => 0; //Replace with actual message count retrieval
-  const handleLikeClick = (topicId: string, e: React.MouseEvent) => {
+  const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log("Like clicked for topic:", topicId);
-  };
-  const handleChatClick = (topicId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    console.log("Chat clicked for topic:", topicId);
+    const newLikeCount = toggleLike(topic.id);
+    setLikeCount(newLikeCount);
   };
 
   return (
@@ -117,18 +114,21 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
             <div className="flex items-center gap-4 p-4">
               <div className="flex items-center gap-4">
                 <button 
-                  onClick={(e) => handleLikeClick(topic.id, e)}
+                  onClick={handleLikeClick}
                   className="hover:opacity-70 transition-opacity"
                 >
                   <Heart 
                     className={cn(
                       "w-6 h-6 text-white",
-                      getLikes(topic.id) > 0 ? "fill-red-500" : "fill-none"
+                      likeCount > 0 ? "fill-red-500" : "fill-none"
                     )}
                   />
                 </button>
                 <button 
-                  onClick={(e) => handleChatClick(topic.id, e)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowChat(true);
+                  }}
                   className="hover:opacity-70 transition-opacity"
                 >
                   <MessageCircle className="w-6 h-6 text-white" />
@@ -138,7 +138,7 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
 
             <div className="px-4 pb-2">
               <div className="text-sm font-semibold text-white mb-2">
-                {getLikes(topic.id)} likes · {getMessageCount(topic.id)} questions
+                {likeCount} likes · {messageCount} questions
               </div>
             </div>
 

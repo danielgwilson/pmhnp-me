@@ -15,6 +15,9 @@ interface TopicFeedProps {
 export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
   const [_, setLocation] = useLocation();
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>(
+    topics.reduce((acc, topic) => ({ ...acc, [topic.id]: getLikes(topic.id) }), {})
+  );
 
   const handleImageError = (topicId: string) => {
     setFailedImages(prev => new Set([...prev, topicId]));
@@ -22,7 +25,7 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
 
   const handleDoubleTap = (topicId: string, e: React.MouseEvent) => {
     if (e.detail === 2) {
-      toggleLike(topicId);
+      handleLikeClick(topicId, e);
     }
   };
 
@@ -33,7 +36,8 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
 
   const handleLikeClick = (topicId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    toggleLike(topicId);
+    const newLikeCount = toggleLike(topicId);
+    setLikeCounts(prev => ({ ...prev, [topicId]: newLikeCount }));
   };
 
   return (
@@ -79,7 +83,7 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
                   <Heart 
                     className={cn(
                       "w-6 h-6",
-                      getLikes(topic.id) > 0 ? "fill-red-500 text-red-500" : "text-foreground"
+                      likeCounts[topic.id] > 0 ? "fill-red-500 text-red-500" : "text-foreground"
                     )}
                   />
                 </button>
@@ -93,7 +97,7 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
 
               {/* Like count */}
               <div className="text-sm font-semibold mb-1">
-                {getLikes(topic.id)} likes
+                {likeCounts[topic.id]} likes
               </div>
 
               {/* Content */}
