@@ -8,6 +8,8 @@ import { X } from 'lucide-react';
 import { addToHistory } from '@/lib/storage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
+import { updateDailyProgress, updateStreak, checkAndUnlockAchievements } from '@/lib/gamification';
+import { showAchievementToast } from '@/components/AchievementToast';
 
 interface TopicStoryProps {
   topic: Topic;
@@ -20,6 +22,12 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
 
   useEffect(() => {
     addToHistory(topic.id);
+    const progress = updateDailyProgress('topic');
+    const streak = updateStreak(progress.topicsStudied);
+    const newAchievements = checkAndUnlockAchievements();
+    newAchievements.forEach(achievement => {
+      showAchievementToast(achievement);
+    });
   }, [topic.id]);
 
   const handleProgressComplete = () => {
@@ -42,9 +50,18 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
     }
   };
 
+  const handleChatSubmit = async (message: string) => {
+    updateDailyProgress('question');
+    const newAchievements = checkAndUnlockAchievements();
+    newAchievements.forEach(achievement => {
+      showAchievementToast(achievement);
+    });
+  };
+
+
   return (
     <AnimatePresence mode="wait">
-      <motion.div 
+      <motion.div
         className="fixed inset-0 bg-black text-white"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -120,6 +137,7 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
           topicId={topic.id}
           isOpen={showChat}
           onClose={() => setShowChat(false)}
+          onSubmit={handleChatSubmit}
         />
       </motion.div>
     </AnimatePresence>
