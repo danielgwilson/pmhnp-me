@@ -12,7 +12,6 @@ export const Home: FC = () => {
 
   return (
     <div className="pb-20">
-      <h1 className="p-4 text-2xl font-semibold">PMHNP-BC Training</h1>
       <TopicCircles topics={mockTopics} />
       <TopicFeed topics={randomizedTopics} />
     </div>

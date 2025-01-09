@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useLocation } from 'wouter';
 import { TopicFeed } from '@/components/TopicFeed';
 import { mockTopics } from '@/data/topics';
 import { Command, CommandInput, CommandList, CommandItem } from '@/components/ui/command';
@@ -27,6 +28,7 @@ const categories: TopicCategory[] = [
 
 export const Search: FC = () => {
   const [search, setSearch] = useState('');
+  const [_, setLocation] = useLocation();
 
   const filteredTopics = mockTopics.filter(
     topic =>
@@ -36,7 +38,7 @@ export const Search: FC = () => {
 
   return (
     <div className="flex flex-col max-w-md mx-auto p-4 pb-20">
-      <Command className="rounded-lg">
+      <Command>
         <CommandInput
           placeholder="Search topics..."
           value={search}
@@ -48,7 +50,10 @@ export const Search: FC = () => {
               key={topic.id}
               value={topic.title}
               className="cursor-pointer"
-              onSelect={() => setSearch(topic.title)}
+              onSelect={() => {
+                setLocation(`/story/${topic.id}`);
+                setSearch('');
+              }}
             >
               {topic.title}
             </CommandItem>
@@ -60,27 +65,21 @@ export const Search: FC = () => {
         <div className="mt-6 space-y-6">
           {categories.map((category) => (
             <div key={category.title}>
-              <h2 className="text-lg font-semibold mb-3">{category.title}</h2>
+              {/* Removed h2 title */}
               <ScrollArea className="w-full whitespace-nowrap">
                 <div className="flex w-full gap-4">
                   {category.topics.map((topic) => (
                     <Card 
                       key={topic.id}
-                      className="w-[250px] flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity"
-                      onClick={() => {
-                        //This line is added to make the code runnable
-                        const setLocation = (path: string) => {
-                          console.log(`Navigating to ${path}`);
-                        };
-                        setLocation(`/story/${topic.id}`)
-                      }}
+                      className="w-[250px] flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity overflow-hidden"
+                      onClick={() => setLocation(`/story/${topic.id}`)}
                     >
                       <CardContent className="p-4">
                         <div className="aspect-video mb-2">
                           <img
                             src={topic.imageUrl}
                             alt={topic.title}
-                            className="w-full h-full object-cover rounded"
+                            className="w-full h-full object-cover rounded-lg"
                           />
                         </div>
                         <h3 className="font-medium truncate">{topic.title}</h3>

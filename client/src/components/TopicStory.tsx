@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import { addToHistory } from '@/lib/storage';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Input } from '@/components/ui/input';
 
 interface TopicStoryProps {
   topic: Topic;
@@ -89,13 +90,14 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
           </div>
 
           <div className="p-4">
-            <Button
-              variant="outline"
-              className="w-full text-white border-white"
-              onClick={() => setShowChat(true)}
-            >
-              Ask a question about this topic
-            </Button>
+            <Input
+              className="w-full bg-transparent border-white text-white placeholder:text-gray-400"
+              placeholder="Ask a question about this topic..."
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowChat(true);
+              }}
+            />
           </div>
         </div>
 
