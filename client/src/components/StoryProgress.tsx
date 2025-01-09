@@ -4,23 +4,29 @@ import { Progress } from '@/components/ui/progress';
 interface StoryProgressProps {
   total: number;
   current: number;
+  onComplete?: () => void;
 }
 
-export const StoryProgress: FC<StoryProgressProps> = ({ total, current }) => {
+export const StoryProgress: FC<StoryProgressProps> = ({ total, current, onComplete }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    setProgress(0); // Reset progress when current changes
+
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          return 0;
+          if (onComplete) {
+            onComplete();
+          }
+          return 100; // Stay at 100
         }
         return prev + 1;
       });
     }, 50);
 
     return () => clearInterval(timer);
-  }, [current]);
+  }, [current, onComplete]);
 
   return (
     <div className="w-full px-4 flex gap-1">

@@ -22,17 +22,13 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
     addToHistory(topic.id);
   }, [topic.id]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (currentSlide < topic.slides.length - 1) {
-        setCurrentSlide(currentSlide + 1);
-      } else {
-        setLocation('/');
-      }
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [currentSlide, topic.slides.length, setLocation]);
+  const handleProgressComplete = () => {
+    if (currentSlide < topic.slides.length - 1) {
+      setCurrentSlide(currentSlide + 1);
+    } else {
+      setLocation('/');
+    }
+  };
 
   const handleTap = (e: React.MouseEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -42,11 +38,7 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
     if (relativeX < 0.25 && currentSlide > 0) {
       setCurrentSlide(currentSlide - 1);
     } else if (relativeX >= 0.25) {
-      if (currentSlide < topic.slides.length - 1) {
-        setCurrentSlide(currentSlide + 1);
-      } else {
-        setLocation('/');
-      }
+      handleProgressComplete();
     }
   };
 
@@ -77,6 +69,7 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
           <StoryProgress
             total={topic.slides.length}
             current={currentSlide}
+            onComplete={handleProgressComplete}
           />
 
           <div

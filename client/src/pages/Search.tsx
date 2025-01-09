@@ -1,10 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useState, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { TopicFeed } from '@/components/TopicFeed';
 import { mockTopics } from '@/data/topics';
 import { Command, CommandInput, CommandList, CommandItem } from '@/components/ui/command';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface TopicCategory {
   title: string;
@@ -29,6 +32,32 @@ const categories: TopicCategory[] = [
 export const Search: FC = () => {
   const [search, setSearch] = useState('');
   const [_, setLocation] = useLocation();
+  const scrollRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [chevronStates, setChevronStates] = useState<{ left: boolean; right: boolean }[]>(
+    categories.map(() => ({ left: false, right: true }))
+  );
+
+  const handleScroll = (index: number) => {
+    const ref = scrollRefs.current[index];
+    if (!ref) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = ref;
+    setChevronStates(prev => {
+      const newStates = [...prev];
+      newStates[index] = {
+        left: scrollLeft > 0,
+        right: scrollLeft + clientWidth < scrollWidth - 10
+      };
+      return newStates;
+    });
+  };
+
+  const scroll = (index: number, direction: 'left' | 'right') => {
+    const ref = scrollRefs.current[index];
+    if (!ref) return;
+    const offset = direction === 'left' ? -300 : 300;
+    ref.scrollBy({ left: offset, behavior: 'smooth' });
+  };
 
   const filteredTopics = mockTopics.filter(
     topic =>
@@ -63,11 +92,14 @@ export const Search: FC = () => {
 
       {!search && (
         <div className="mt-6 space-y-6">
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <div key={category.title} className="relative">
-              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
               <ScrollArea className="w-full whitespace-nowrap">
-                <div className="flex w-full gap-4">
+                <div
+                  ref={el => scrollRefs.current[index] = el}
+                  className="flex w-full gap-4 scroll-smooth"
+                  onScroll={() => handleScroll(index)}
+                >
                   {category.topics.map((topic) => (
                     <Card 
                       key={topic.id}
@@ -92,7 +124,32 @@ export const Search: FC = () => {
                 </div>
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
-              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+
+              {/* Desktop Navigation */}
+              <div className="hidden md:block">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full",
+                    !chevronStates[index]?.left && "hidden"
+                  )}
+                  onClick={() => scroll(index, 'left')}
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "absolute right-0 top-1/2 -translate-y-1/2 translate-x-full",
+                    !chevronStates[index]?.right && "hidden"
+                  )}
+                  onClick={() => scroll(index, 'right')}
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </Button>
+              </div>
             </div>
           ))}
         </div>
