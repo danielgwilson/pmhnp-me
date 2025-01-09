@@ -3,60 +3,51 @@ import { Card, CardContent } from '@/components/ui/card';
 import { mockTopics } from '@/data/topics';
 import { getHistory } from '@/lib/storage';
 import { ProgressCircle } from '@/components/ui/progress-circle';
-import { getDailyProgress, getStreakStatus } from '@/lib/gamification';
+import { ImageFallback } from '@/components/ui/image-fallback';
 import { Flame } from 'lucide-react';
 
 export const Profile: FC = () => {
   const history = getHistory();
-  const progress = getDailyProgress();
-  const streak = getStreakStatus();
   const viewedTopics = mockTopics.filter(topic => history.includes(topic.id));
 
+  // Calculate total slides viewed (assuming each topic has slides array)
+  const totalSlidesViewed = viewedTopics.reduce((total, topic) => total + topic.slides.length, 0);
+
   return (
-    <div className="p-4 pb-20 max-w-2xl mx-auto">
-      {/* Daily Progress & Streak */}
+    <div className="max-w-2xl mx-auto p-4 pb-20">
+      {/* Progress Stats */}
       <Card className="mb-6">
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-semibold">Daily Goal</h2>
+              <h2 className="text-xl font-semibold">Learning Progress</h2>
               <p className="text-sm text-muted-foreground">
-                Study {3 - progress.topicsStudied} more topics today
+                Keep going! You're making great progress.
               </p>
             </div>
-            <div className="flex items-center gap-6">
-              {/* Streak */}
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-1 text-orange-500">
-                  <Flame className="w-6 h-6" />
-                  <span className="text-xl font-bold">{streak.currentStreak}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">Day Streak</span>
+            {/* Progress Circle */}
+            <ProgressCircle 
+              progress={(viewedTopics.length / mockTopics.length) * 100} 
+              size={80} 
+              strokeWidth={8}
+            >
+              <div className="text-center">
+                <span className="text-lg font-semibold">
+                  {Math.round((viewedTopics.length / mockTopics.length) * 100)}%
+                </span>
               </div>
-              {/* Progress Circle */}
-              <ProgressCircle 
-                progress={progress.goalProgress} 
-                size={80} 
-                strokeWidth={8}
-              >
-                <div className="text-center">
-                  <span className="text-lg font-semibold">
-                    {Math.round(progress.goalProgress)}%
-                  </span>
-                </div>
-              </ProgressCircle>
-            </div>
+            </ProgressCircle>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4 mt-4">
             <div className="text-center p-3 bg-muted rounded-lg">
-              <p className="text-2xl font-bold">{progress.topicsStudied}</p>
-              <p className="text-sm text-muted-foreground">Topics Today</p>
+              <p className="text-2xl font-bold">{viewedTopics.length}</p>
+              <p className="text-sm text-muted-foreground">Topics Completed</p>
             </div>
             <div className="text-center p-3 bg-muted rounded-lg">
-              <p className="text-2xl font-bold">{progress.questionsAsked}</p>
-              <p className="text-sm text-muted-foreground">Questions Asked</p>
+              <p className="text-2xl font-bold">{totalSlidesViewed}</p>
+              <p className="text-sm text-muted-foreground">Slides Viewed</p>
             </div>
           </div>
         </CardContent>
@@ -69,11 +60,10 @@ export const Profile: FC = () => {
           <Card key={topic.id} className="overflow-hidden">
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                  <img
-                    src={topic.imageUrl}
-                    alt={topic.title}
-                    className="w-full h-full object-cover"
+                <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                  <ImageFallback
+                    title={topic.title}
+                    imageUrl={topic.imageUrl}
                   />
                 </div>
                 <div className="min-w-0">
