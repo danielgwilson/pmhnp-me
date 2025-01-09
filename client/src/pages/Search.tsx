@@ -4,7 +4,7 @@ import { TopicFeed } from '@/components/TopicFeed';
 import { mockTopics } from '@/data/topics';
 import { Command, CommandInput, CommandList, CommandItem } from '@/components/ui/command';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -106,27 +106,27 @@ export const Search: FC = () => {
                       className="w-[250px] flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity overflow-hidden"
                       onClick={() => setLocation(`/story/${topic.id}`)}
                     >
-                      <CardContent className="p-4">
-                        <div className="aspect-video mb-2 relative bg-muted rounded-lg overflow-hidden">
-                          {topic.imageUrl ? (
-                            <img
-                              src={topic.imageUrl}
-                              alt={topic.title}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <span className="text-2xl font-semibold text-muted-foreground">
-                                {topic.title.slice(0, 2).toUpperCase()}
-                              </span>
-                            </div>
-                          )}
-                        </div>
+                      <div className="aspect-video relative bg-muted">
+                        {topic.imageUrl ? (
+                          <img
+                            src={topic.imageUrl}
+                            alt={topic.title}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-2xl font-semibold text-muted-foreground">
+                              {topic.title.slice(0, 2).toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-3">
                         <h3 className="font-medium truncate">{topic.title}</h3>
                         <p className="text-sm text-muted-foreground truncate">
                           {topic.description}
                         </p>
-                      </CardContent>
+                      </div>
                     </Card>
                   ))}
                 </div>
