@@ -38,7 +38,7 @@ export const Search: FC = () => {
 
   return (
     <div className="flex flex-col max-w-md mx-auto p-4 pb-20">
-      <Command>
+      <Command className="rounded-lg border shadow-none">
         <CommandInput
           placeholder="Search topics..."
           value={search}
@@ -64,8 +64,8 @@ export const Search: FC = () => {
       {!search && (
         <div className="mt-6 space-y-6">
           {categories.map((category) => (
-            <div key={category.title}>
-              {/* Removed h2 title */}
+            <div key={category.title} className="relative">
+              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
               <ScrollArea className="w-full whitespace-nowrap">
                 <div className="flex w-full gap-4">
                   {category.topics.map((topic) => (
@@ -92,6 +92,7 @@ export const Search: FC = () => {
                 </div>
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
+              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
             </div>
           ))}
         </div>

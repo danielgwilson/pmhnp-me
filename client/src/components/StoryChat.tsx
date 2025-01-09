@@ -7,8 +7,9 @@ import {
 } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { mockAIResponses } from '@/data/topics';
 import { incrementMessageCount } from '@/lib/storage';
+import { useMutation } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 
 interface StoryChatProps {
   topicId: string;
@@ -24,34 +25,56 @@ interface Message {
 export const StoryChat: FC<StoryChatProps> = ({ topicId, isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const { toast } = useToast();
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const chatMutation = useMutation({
+    mutationFn: async (message: string) => {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: topicId, message }),
+      });
 
-    const newMessages = [
-      ...messages,
-      { text: input, isUser: true }
-    ];
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error);
+      }
 
-    // Simulate AI response
-    const responses = mockAIResponses[topicId];
-    if (responses && responses.length > 0) {
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      newMessages.push({ text: randomResponse, isUser: false });
-      // Increment twice for user message + AI response
-      incrementMessageCount(topicId);
-      incrementMessageCount(topicId);
-    }
+      const data = await res.json();
+      return data.response;
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+      });
+      console.error('Chat error:', error);
+    },
+  });
 
-    setMessages(newMessages);
+  const handleSend = async () => {
+    if (!input.trim() || chatMutation.isPending) return;
+
+    const userMessage = { text: input, isUser: true };
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
+    incrementMessageCount(topicId);
+
+    try {
+      const response = await chatMutation.mutateAsync(input);
+      setMessages(prev => [...prev, { text: response, isUser: false }]);
+      incrementMessageCount(topicId);
+    } catch (error) {
+      // Error is handled by mutation error callback
+    }
   };
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose} modal={false}>
       <SheetContent 
         side="bottom" 
-        className="h-[80vh] p-0 bg-background/95 backdrop-blur-sm border-t border-white/20"
+        className="h-[80vh] p-0 bg-background border-t"
       >
         <div className="flex flex-col h-full">
           <SheetHeader className="h-12 flex-shrink-0 border-b p-4">
@@ -75,6 +98,13 @@ export const StoryChat: FC<StoryChatProps> = ({ topicId, isOpen, onClose }) => {
                 </div>
               </div>
             ))}
+            {chatMutation.isPending && (
+              <div className="flex justify-start">
+                <div className="rounded-2xl px-4 py-2 bg-muted animate-pulse">
+                  Typing...
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="p-4 flex gap-2 border-t">
@@ -84,8 +114,11 @@ export const StoryChat: FC<StoryChatProps> = ({ topicId, isOpen, onClose }) => {
               placeholder="Message..."
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               className="bg-transparent"
+              disabled={chatMutation.isPending}
             />
-            <Button onClick={handleSend}>Send</Button>
+            <Button onClick={handleSend} disabled={chatMutation.isPending}>
+              Send
+            </Button>
           </div>
         </div>
       </SheetContent>

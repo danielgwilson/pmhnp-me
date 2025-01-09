@@ -88,6 +88,46 @@ export const mockTopics: Topic[] = [
         content: "Cognitive Behavioral Therapy is highly effective for anxiety disorders.",
       }
     ]
+  },
+  {
+    id: "substance-disorders",
+    title: "Substance Use Disorders",
+    description: "Assessment and treatment of substance use disorders",
+    imageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef",
+    slides: [
+      {
+        id: "1",
+        content: "Substance use disorders involve a pattern of use that leads to clinically significant impairment.",
+      },
+      {
+        id: "2",
+        content: "Assessment includes evaluation of frequency, intensity, and impact on daily functioning.",
+      },
+      {
+        id: "3",
+        content: "Treatment often combines pharmacological and psychosocial interventions.",
+      }
+    ]
+  },
+  {
+    id: "therapeutic-communication",
+    title: "Therapeutic Communication",
+    description: "Essential skills for effective patient interaction",
+    imageUrl: "https://images.unsplash.com/photo-1573497620053-ea5300f94f21",
+    slides: [
+      {
+        id: "1",
+        content: "Therapeutic communication builds trust and facilitates assessment.",
+      },
+      {
+        id: "2",
+        content: "Active listening and empathy are core components.",
+      },
+      {
+        id: "3",
+        content: "Non-verbal cues play a crucial role in patient interaction.",
+      }
+    ]
   }
 ];
 
