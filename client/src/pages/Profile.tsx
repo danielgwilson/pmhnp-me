@@ -8,7 +8,7 @@ export const Profile: FC = () => {
   const viewedTopics = mockTopics.filter(topic => history.includes(topic.id));
 
   return (
-    <div className="p-4 pb-20">
+    <div className="p-4 pb-20 max-w-md mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Your Profile</h1>
       <h2 className="text-lg font-medium mb-2">Recently Viewed</h2>
       <div className="space-y-4">
@@ -19,7 +19,7 @@ export const Profile: FC = () => {
                 <img
                   src={topic.imageUrl}
                   alt={topic.title}
-                  className="w-16 h-16 object-cover rounded"
+                  className="w-16 h-16 object-cover rounded-lg"
                 />
                 <div>
                   <h3 className="font-semibold">{topic.title}</h3>

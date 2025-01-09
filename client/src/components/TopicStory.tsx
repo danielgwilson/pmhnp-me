@@ -53,11 +53,12 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
   return (
     <AnimatePresence>
       <motion.div 
-        className="fixed inset-0 bg-black text-white"
+        className="fixed inset-0 bg-black/50 text-white" // Added background blur
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0, opacity: 0 }}
         transition={{ duration: 0.2 }}
+        style={{ zIndex: 50 }}
       >
         <div className="h-full flex flex-col">
           <div className="p-4 flex justify-between items-center">
@@ -69,7 +70,7 @@ export const TopicStory: FC<TopicStoryProps> = ({ topic }) => {
             >
               <X className="h-6 w-6" />
             </Button>
-            <h2 className="text-lg font-semibold">{topic.title}</h2>
+            <h2 className="text-lg font-semibold max-w-xs text-center mx-auto">{topic.title}</h2> {/* Centered and max-width */}
             <div className="w-6" />
           </div>
 
