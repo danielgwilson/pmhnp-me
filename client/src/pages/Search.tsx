@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ImageFallback } from '@/components/ui/image-fallback';
 
 interface TopicCategory {
   title: string;
@@ -36,6 +37,11 @@ export const Search: FC = () => {
   const [chevronStates, setChevronStates] = useState<{ left: boolean; right: boolean }[]>(
     categories.map(() => ({ left: false, right: true }))
   );
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+
+  const handleImageError = (topicId: string) => {
+    setFailedImages(prev => new Set([...prev, topicId]));
+  };
 
   const handleScroll = (index: number) => {
     const ref = scrollRefs.current[index];
@@ -107,18 +113,16 @@ export const Search: FC = () => {
                       onClick={() => setLocation(`/story/${topic.id}`)}
                     >
                       <div className="aspect-video relative bg-muted">
-                        {topic.imageUrl ? (
+                        {topic.imageUrl && !failedImages.has(topic.id) ? (
                           <img
                             src={topic.imageUrl}
                             alt={topic.title}
                             className="absolute inset-0 w-full h-full object-cover"
+                            onError={() => handleImageError(topic.id)}
+                            loading="lazy"
                           />
                         ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-2xl font-semibold text-muted-foreground">
-                              {topic.title.slice(0, 2).toUpperCase()}
-                            </span>
-                          </div>
+                          <ImageFallback title={topic.title} />
                         )}
                       </div>
                       <div className="p-3">

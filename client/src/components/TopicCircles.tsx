@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ImageFallback } from '@/components/ui/image-fallback';
 
 interface TopicCirclesProps {
   topics: Topic[];
@@ -15,6 +16,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftChevron, setShowLeftChevron] = useState(false);
   const [showRightChevron, setShowRightChevron] = useState(true);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -22,6 +24,10 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
     setShowLeftChevron(scrollLeft > 0);
     setShowRightChevron(scrollLeft + clientWidth < scrollWidth - 10);
+  };
+
+  const handleImageError = (topicId: string) => {
+    setFailedImages(prev => new Set([...prev, topicId]));
   };
 
   const scroll = (direction: 'left' | 'right') => {
@@ -54,14 +60,18 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
           >
             <div className="rounded-full p-1 bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500">
               <Avatar className="w-16 h-16 border border-white">
-                <AvatarImage src={topic.imageUrl} alt={topic.title} />
-                <AvatarFallback>
-                  <div className="w-full h-full bg-muted flex items-center justify-center">
-                    <span className="text-lg font-semibold text-muted-foreground">
-                      {topic.title.slice(0, 2).toUpperCase()}
-                    </span>
-                  </div>
-                </AvatarFallback>
+                {topic.imageUrl && !failedImages.has(topic.id) ? (
+                  <AvatarImage 
+                    src={topic.imageUrl} 
+                    alt={topic.title}
+                    onError={() => handleImageError(topic.id)}
+                    loading="lazy"
+                  />
+                ) : (
+                  <AvatarFallback>
+                    <ImageFallback title={topic.title} />
+                  </AvatarFallback>
+                )}
               </Avatar>
             </div>
             <span className="text-xs truncate max-w-[64px] text-center">
