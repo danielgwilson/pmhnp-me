@@ -16,10 +16,11 @@ export const StoryProgress: FC<StoryProgressProps> = ({ total, current, onComple
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
+          clearInterval(timer);
           if (onComplete) {
             onComplete();
           }
-          return 100; // Stay at 100
+          return 100;
         }
         return prev + 1;
       });

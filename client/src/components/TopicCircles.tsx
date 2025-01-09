@@ -43,7 +43,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
     <div className="relative max-w-md mx-auto">
       <div 
         ref={scrollRef}
-        className="flex overflow-x-auto gap-4 p-4 no-scrollbar scroll-smooth"
+        className="flex overflow-x-auto gap-4 p-4 no-scrollbar scroll-smooth relative"
         onScroll={handleScroll}
       >
         {topics.map((topic) => (
@@ -55,8 +55,8 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
             <div className="rounded-full p-1.5 bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500">
               <Avatar className="w-16 h-16 border-2 border-white">
                 <AvatarImage src={topic.imageUrl} alt={topic.title} />
-                <AvatarFallback className="bg-muted">
-                  {topic.title.slice(0, 2)}
+                <AvatarFallback className="bg-muted text-muted-foreground font-medium">
+                  {topic.title.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -73,7 +73,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
           variant="ghost"
           size="icon"
           className={cn(
-            "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full",
+            "absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
             !showLeftChevron && "hidden"
           )}
           onClick={() => scroll('left')}
@@ -84,7 +84,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
           variant="ghost"
           size="icon"
           className={cn(
-            "absolute right-0 top-1/2 -translate-y-1/2 translate-x-full",
+            "absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
             !showRightChevron && "hidden"
           )}
           onClick={() => scroll('right')}

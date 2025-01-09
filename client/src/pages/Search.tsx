@@ -97,7 +97,7 @@ export const Search: FC = () => {
               <ScrollArea className="w-full whitespace-nowrap">
                 <div
                   ref={el => scrollRefs.current[index] = el}
-                  className="flex w-full gap-4 scroll-smooth"
+                  className="flex w-full gap-4 scroll-smooth relative"
                   onScroll={() => handleScroll(index)}
                 >
                   {category.topics.map((topic) => (
@@ -107,11 +107,19 @@ export const Search: FC = () => {
                       onClick={() => setLocation(`/story/${topic.id}`)}
                     >
                       <CardContent className="p-4">
-                        <div className="aspect-video mb-2">
+                        <div className="aspect-video mb-2 relative bg-muted rounded-lg overflow-hidden">
                           <img
                             src={topic.imageUrl}
                             alt={topic.title}
-                            className="w-full h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.parentElement;
+                              if (fallback) {
+                                fallback.classList.add('flex', 'items-center', 'justify-center');
+                                fallback.innerHTML = `<span class="text-2xl font-medium text-muted-foreground">${topic.title.slice(0, 2).toUpperCase()}</span>`;
+                              }
+                            }}
                           />
                         </div>
                         <h3 className="font-medium truncate">{topic.title}</h3>
@@ -131,7 +139,7 @@ export const Search: FC = () => {
                   variant="ghost"
                   size="icon"
                   className={cn(
-                    "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full",
+                    "absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
                     !chevronStates[index]?.left && "hidden"
                   )}
                   onClick={() => scroll(index, 'left')}
@@ -142,7 +150,7 @@ export const Search: FC = () => {
                   variant="ghost"
                   size="icon"
                   className={cn(
-                    "absolute right-0 top-1/2 -translate-y-1/2 translate-x-full",
+                    "absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 shadow-md hover:bg-background/95 z-10",
                     !chevronStates[index]?.right && "hidden"
                   )}
                   onClick={() => scroll(index, 'right')}
