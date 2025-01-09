@@ -5,6 +5,7 @@ import { Profile } from "@/pages/Profile";
 import { Navigation } from "@/components/layout/Navigation";
 import { TopicStory } from "@/components/TopicStory";
 import { mockTopics } from "@/data/topics";
+import { ToastManager } from "@/components/AchievementToast";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         </Route>
       </Switch>
       <Navigation />
+      <ToastManager />
     </>
   );
 }

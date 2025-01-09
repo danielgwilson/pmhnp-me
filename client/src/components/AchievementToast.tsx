@@ -7,8 +7,6 @@ interface AchievementToastProps {
 }
 
 export const AchievementToast: FC<AchievementToastProps> = ({ achievement }) => {
-  const { toast } = useToast();
-  
   return (
     <div className="flex items-start gap-2">
       <div className="text-2xl">{achievement.icon}</div>
@@ -20,14 +18,21 @@ export const AchievementToast: FC<AchievementToastProps> = ({ achievement }) => 
   );
 };
 
-export const showAchievementToast = (achievement: Achievement) => {
+// Create a toast manager that doesn't use hooks directly
+let toastFn: ((props: { title: string; description: React.ReactNode; duration?: number }) => void) | null = null;
+
+export const ToastManager: FC = () => {
   const { toast } = useToast();
-  
-  toast({
-    title: "Achievement Unlocked!",
-    description: (
-      <AchievementToast achievement={achievement} />
-    ),
-    duration: 5000,
-  });
+  toastFn = toast;
+  return null;
+};
+
+export const showAchievementToast = (achievement: Achievement) => {
+  if (toastFn) {
+    toastFn({
+      title: "Achievement Unlocked!",
+      description: <AchievementToast achievement={achievement} />,
+      duration: 5000,
+    });
+  }
 };

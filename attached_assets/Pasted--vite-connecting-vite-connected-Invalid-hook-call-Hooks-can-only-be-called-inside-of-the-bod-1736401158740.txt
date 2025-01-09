@@ -1,0 +1,36 @@
+[vite] connecting...
+[vite] connected.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+The above error occurred in the <TopicStory> component:
+
+    at TopicStory (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/src/components/TopicStory.tsx:29:30)
+    at Route (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=36c9d6f2:191:16)
+    at Switch (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=36c9d6f2:247:17)
+    at App
+    at QueryClientProvider (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=36c9d6f2:2805:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+at Object.throwInvalidHookError (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-WERSD76P.js?v=36c9d6f2:11501:17)
+at Object.useState (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-3TFVT2CW.js?v=36c9d6f2:1066:29)
+at useToast (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/src/hooks/use-toast.ts:108:35)
+at showAchievementToast (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/src/components/AchievementToast.tsx:56:21)
+at https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/src/components/TopicStory.tsx:40:7
+at Array.forEach (<anonymous>)
+at https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/src/components/TopicStory.tsx:39:21
+at commitHookEffectListMount (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-WERSD76P.js?v=36c9d6f2:16915:34)
+at commitPassiveMountOnFiber (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-WERSD76P.js?v=36c9d6f2:18156:19)
+at commitPassiveMountEffects_complete (https://a8e32dd6-b9a0-4cb0-a17d-7584d38f0b54-00-1z2vubl4poxn2.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-WERSD76P.js?v=36c9d6f2:18129:17)
