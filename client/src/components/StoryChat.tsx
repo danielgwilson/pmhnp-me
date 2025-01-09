@@ -8,6 +8,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { mockAIResponses } from '@/data/topics';
+import { incrementMessageCount } from '@/lib/storage';
 
 interface StoryChatProps {
   topicId: string;
@@ -37,6 +38,9 @@ export const StoryChat: FC<StoryChatProps> = ({ topicId, isOpen, onClose }) => {
     if (responses && responses.length > 0) {
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
       newMessages.push({ text: randomResponse, isUser: false });
+      // Increment twice for user message + AI response
+      incrementMessageCount(topicId);
+      incrementMessageCount(topicId);
     }
 
     setMessages(newMessages);

@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { useLocation } from 'wouter';
 import { Topic } from '@/data/topics';
 import { Card, CardContent } from '@/components/ui/card';
+import { MessageCircle } from 'lucide-react';
+import { getMessageCount } from '@/lib/storage';
 
 interface TopicFeedProps {
   topics: Topic[];
@@ -37,8 +39,16 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
                   className="w-16 h-16 object-cover rounded"
                 />
               )}
-              <div>
-                <h3 className="font-semibold text-lg">{topic.title}</h3>
+              <div className="flex-1">
+                <div className="flex justify-between items-start">
+                  <h3 className="font-semibold text-lg">{topic.title}</h3>
+                  {getMessageCount(topic.id) > 0 && (
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <MessageCircle className="w-4 h-4 mr-1" />
+                      {getMessageCount(topic.id)}
+                    </div>
+                  )}
+                </div>
                 <p className="text-sm text-gray-600">{topic.description}</p>
               </div>
             </div>

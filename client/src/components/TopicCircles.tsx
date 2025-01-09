@@ -18,8 +18,8 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
           className="flex flex-col items-center gap-1 cursor-pointer"
           onClick={() => setLocation(`/story/${topic.id}`)}
         >
-          <div className="rounded-full p-[3px] bg-gradient-to-tr from-blue-400 via-cyan-400 to-blue-600">
-            <Avatar className="w-16 h-16 border-[3px] border-white">
+          <div className="rounded-full p-1 bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500">
+            <Avatar className="w-16 h-16 border-2 border-white">
               <AvatarImage src={topic.imageUrl} alt={topic.title} />
               <AvatarFallback>{topic.title[0]}</AvatarFallback>
             </Avatar>
