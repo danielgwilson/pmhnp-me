@@ -55,8 +55,8 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
             <div className="rounded-full p-1 bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500">
               <Avatar className="w-16 h-16 border border-white">
                 <AvatarImage src={topic.imageUrl} alt={topic.title} />
-                <AvatarFallback className="bg-muted">
-                  <div className="w-full h-full flex items-center justify-center">
+                <AvatarFallback>
+                  <div className="w-full h-full bg-muted flex items-center justify-center">
                     <span className="text-lg font-semibold text-muted-foreground">
                       {topic.title.slice(0, 2).toUpperCase()}
                     </span>
@@ -77,7 +77,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
           variant="secondary"
           size="icon"
           className={cn(
-            "absolute -left-6 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
+            "absolute -left-8 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
             !showLeftChevron && "hidden"
           )}
           onClick={() => scroll('left')}
@@ -88,7 +88,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({ topics }) => {
           variant="secondary"
           size="icon"
           className={cn(
-            "absolute -right-6 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
+            "absolute -right-8 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
             !showRightChevron && "hidden"
           )}
           onClick={() => scroll('right')}

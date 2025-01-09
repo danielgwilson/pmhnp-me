@@ -139,7 +139,7 @@ export const Search: FC = () => {
                   variant="secondary"
                   size="icon"
                   className={cn(
-                    "absolute -left-4 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
+                    "absolute -left-8 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
                     !chevronStates[index]?.left && "hidden"
                   )}
                   onClick={() => scroll(index, 'left')}
@@ -150,7 +150,7 @@ export const Search: FC = () => {
                   variant="secondary"
                   size="icon"
                   className={cn(
-                    "absolute -right-4 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
+                    "absolute -right-8 top-1/2 -translate-y-1/2 bg-background shadow-lg hover:bg-background z-10 rounded-full",
                     !chevronStates[index]?.right && "hidden"
                   )}
                   onClick={() => scroll(index, 'right')}
