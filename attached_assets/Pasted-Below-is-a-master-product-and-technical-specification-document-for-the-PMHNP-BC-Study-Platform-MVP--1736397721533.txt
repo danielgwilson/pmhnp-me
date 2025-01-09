@@ -1,0 +1,234 @@
+Below is a master product and technical specification document for the “PMHNP-BC Study Platform MVP” with an Instagram‐Stories‐style UI, AI chat feature, and mobile‐first design. It consolidates your final architecture decisions and includes details that an LLM agent (or any developer) will need to successfully implement this product. We will also attempt to foresee common pitfalls, providing best practices on how to avoid them.
+
+1. Product Overview
+Product Name:
+PMHNP-BC Training Platform (Working title)
+
+Purpose:
+To help aspiring Psychiatric-Mental Health Nurse Practitioners (PMHNPs) study for board certification exams via short, Instagram-style stories and an AI assistant who can answer questions in the context of each topic slide.
+
+Core Features (MVP Scope):
+
+Mobile-First UI
+Home/Feed Page with:
+Horizontal “stories” list at the top (like Instagram story circles)
+Vertical feed of topics below
+Topic “Story” View
+Slides that the user can navigate (previous/next)
+Each slide has brief content text (and could later include images/videos)
+AI Chat within each topic’s “story”
+Chat overlay with local storage for conversation history, so the user can repeatedly reference the same topic’s Q&A
+3 Main Tabs accessible via a bottom navigation bar:
+Feed (home)
+Search
+Profile (contains basic user progress, e.g. local storage of viewed topics)
+Local Data Handling
+Local storage for:
+Chat history per topic
+Viewed topics in the profile
+Out of Scope (Future Enhancements):
+
+Full user authentication system (signup/login)
+Advanced content management (headless CMS, admin UI, etc.)
+Real AI or LLM integration (the MVP can mock or lightly integrate with an API)
+Complex analytics or usage tracking
+Payment / subscription features
+2. Technology Stack & Rationale
+Next.js (App Router)
+Simplifies routing and layout management.
+Well-suited for React-based single-page or multi-page apps.
+TypeScript
+Improved developer experience, type safety, and maintainability.
+TailwindCSS
+Rapid UI development, mobile-first, utility-based styling.
+Shadcn UI (optional components)
+Provides a set of prebuilt, themeable UI components on top of Tailwind.
+Local Storage
+Quick MVP approach for persisting chat history and viewed topics.
+Optional: A minimal AI route or a mock AI function.
+3. Architecture & File Structure
+A minimal recommended file structure:
+
+kotlin
+Copy code
+app/
+  layout.tsx
+  page.tsx            // Feed tab
+  search/
+    page.tsx          // Search tab
+  profile/
+    page.tsx          // Profile tab
+  topic/
+    [topicId]/
+      page.tsx        // Story view for a single topic
+components/
+  BottomNav.tsx
+  ChatOverlay.tsx
+  ...
+data/
+  topics.ts           // Hard-coded topic & slide data
+lib/
+  chatStorage.ts      // localStorage read/write functions
+  ai.ts               // AI call logic (mock or real)
+styles/
+  globals.css
+tailwind.config.js
+tsconfig.json
+package.json
+Key Routing
+
+/ → The “Feed” page (Home tab)
+/search → Search tab placeholder
+/profile → Profile tab placeholder
+/topic/[topicId] → The story/slide view for a given topic
+4. Detailed Feature & Implementation Specifications
+4.1. Navigation / Layout
+Bottom Navigation: “Feed,” “Search,” “Profile.” Sticks to the bottom of the viewport.
+Implemented in BottomNav.tsx, imported in app/layout.tsx.
+Tracks the current path with usePathname() from Next.js, highlights the active icon.
+Pitfalls to Watch Out For
+
+Ensuring bottom nav doesn’t overlap content on small screens → add bottom padding in main content container.
+Making sure the bottom nav is fixed on mobile while allowing the rest of the content to scroll.
+4.2. Home / Feed Page (app/page.tsx)
+Horizontal Scrolling Stories
+
+Display each topic as a round circle with the topic’s abbreviation.
+Tapping the circle navigates to /topic/[topicId].
+Implement with a simple <div className="flex gap-4 overflow-x-auto">.
+Vertical Feed
+
+Display each topic as a card with a title, slide count, and “View Topic” link.
+Also navigates to /topic/[topicId].
+Pitfalls to Watch Out For
+
+Overflows on small screens → ensure overflow-x-auto is in place.
+Performance if the number of topics is large → for an MVP, this is fine.
+4.3. Topic Data (data/topics.ts)
+Hard-coded array of topics, each with an id, title, and an array of slides.
+Slide has: { id, content, ... }.
+In a real app, consider a CMS or database. But for an MVP, static data is easiest.
+Pitfalls to Watch Out For
+
+Misspelled or duplicated IDs.
+Large amounts of real content might require pagination or dynamic loading.
+4.4. Topic Story View (app/topic/[topicId]/page.tsx)
+Loads the topic by matching topicId from the route.
+Slide Navigation:
+For MVP, use “Prev” / “Next” buttons.
+Optionally replicate Instagram’s tap-left/tap-right functionality.
+Local Storage:
+On mount, store the current topicId in a localStorage array called “viewedTopics” for later display in Profile.
+Pitfalls to Watch Out For
+
+Handling out-of-range slide indexes.
+Ensuring story closes or navigates away if we want to mimic Instagram’s auto-close. For MVP, simple is better.
+4.5. Chat Overlay Component
+A full-screen or partial-screen overlay that slides up or appears over the topic.
+Has a text input + “Send” button.
+Renders the conversation with bubbles, distinguishing user vs. AI messages.
+Local Storage for persistent chat:
+Keyed by topicId, so each topic has its own chat thread.
+Pitfalls to Watch Out For
+
+Overlapping UI if the chat overlay is not positioned properly (especially on small screens).
+Handling scroll within the chat if the conversation grows large → use overflow-auto in the chat container.
+4.6. AI Integration
+For the MVP, we can:
+
+Mock AI in the client (no back-end route).
+Or create a minimal Next.js API route (app/api/ai/route.ts) and do a real call to an LLM.
+Pitfalls to Watch Out For
+
+Hitting usage limits if hooking up to a real LLM (e.g., OpenAI).
+Not storing tokens securely if done client-side.
+For an MVP, a mock is safer unless you specifically want a real integration.
+4.7. Search Tab
+Minimal placeholder with an <input type="search" />.
+Future expansions might do a text-based filter for topics.
+Pitfalls to Watch Out For
+
+If implementing real search, be mindful of performance or indexing.
+4.8. Profile Tab
+Shows a list of “viewedTopics” from localStorage.
+No user authentication in MVP, purely local.
+Pitfalls to Watch Out For
+
+Data might be cleared if user resets localStorage.
+5. Data Flow
+Topic Data: Imported from a static file (data/topics.ts).
+Viewed Topics:
+Written to local storage upon opening a topic.
+Read on the Profile page to display.
+Chat Messages:
+Written to local storage as an array of {role, content} objects.
+Read upon opening the chat overlay to restore conversation.
+6. Steps for Implementation
+Initialize Next.js & Tailwind
+npx create-next-app --typescript
+npx tailwindcss init -p & configure.
+Add Shadcn UI (optional)
+npx shadcn-ui init → If you want to use its components.
+Create Folder Structure
+app/layout.tsx → global layout with bottom nav.
+app/page.tsx → feed.
+app/search/page.tsx → search.
+app/profile/page.tsx → profile.
+app/topic/[topicId]/page.tsx → topic story view.
+Implement the Components
+BottomNav
+ChatOverlay
+Possibly “StoryCircle” or “TopicFeedItem” for clarity.
+Local Storage Utilities (in lib/chatStorage.ts):
+getChatHistory(topicId)
+addChatMessage(topicId, message)
+Similar approach for “viewedTopics” or do it inline in the topic page.
+Test the MVP on localhost:3000.
+(Optional) Deploy to Vercel or Netlify.
+7. Potential Pitfalls & Complexity
+A. Layout & Screen Overflows
+
+The combination of a fixed bottom nav and a story overlay can cause scrolling or overflow issues.
+Use developer tools to confirm the overlay and bottom nav do not conflict.
+B. Slide Navigation
+
+If you do a tap-based approach (like real Instagram), watch for edge detection (left half vs. right half) and the user accidentally tapping the chat button. Consider preventing event propagation for UI elements that shouldn’t trigger next/prev.
+C. Chat State
+
+Clearing localStorage on every reload might be confusing if you are developing. Might want to comment out localStorage calls temporarily during heavy dev to ensure consistent testing.
+Be mindful that localStorage can’t store huge amounts of data. Probably fine for an MVP.
+D. Deployment
+
+If you rely on environment variables for a real AI endpoint, set them in Vercel or Netlify properly.
+If you have serverless function cold starts, the chat might feel slow. Possibly cache results.
+E. AI Integration
+
+If hooking up a real LLM, ensure your messages are properly token-limited or chunked. Otherwise you risk hitting token limits or incurring high usage.
+If you store API keys on the client, you risk exposing them. For a real production environment, you must route calls through a server API route.
+8. Testing Recommendations
+Functional Tests
+Verify you can navigate to each tab (Feed, Search, Profile).
+On Feed: confirm tapping a topic circle or feed card opens the correct topic story.
+In Topic View: test next/prev slide buttons, ensure slides change.
+Open Chat: test sending a question, receiving a mock AI reply.
+Check localStorage after these interactions.
+Mobile Responsiveness
+Use devtools to simulate common phone screens. Verify bottom nav remains fixed, no horizontal scroll issues except for the story circles.
+Edge Cases
+If a user tries to open a nonexistent topic ID, e.g. /topic/random, ensure a “Topic not found.” message.
+If localStorage is unavailable (some browsers in private mode?), handle gracefully.
+9. Future Expansion
+While the MVP focuses on local storage, a small set of static topics, and a mock AI, you can expand in many directions:
+
+More Topics / Real Content
+Integrate content from SME (Subject Matter Experts) into a CMS or database.
+Real AI
+A server-based LLM or OpenAI integration, with serverless endpoints in Next.js.
+User Authentication & Cloud DB
+Store user progress and chat transcripts in a real DB so it’s persistent across devices.
+Gamification
+Quizzes, achievements, “score” system, or flashcard-based learning.
+Search Enhancements
+Full-text search of content, indexing all slides or question-answer pairs.
+Conclusion
+This master reference covers the complete specification and rationale for building a minimal but fully functional MVP. It addresses architecture, user flows, data structures, local storage strategies, UI design, and the ways to incorporate a chat with AI. By following these guidelines, the implementing LLM agent (or developer) can sidestep common pitfalls, quickly stand up an MVP, and deliver the requested Instagram‐style experience for PMHNP-BC exam preparation.
