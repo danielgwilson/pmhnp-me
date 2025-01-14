@@ -15,18 +15,22 @@ export async function generateResponse(
 ): Promise<string> {
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
-          content: `You are a PMHNP-BC exam preparation assistant. You provide concise, accurate, and engaging responses about ${topic}. Keep responses brief and conversational.`,
+          content: `
+Act as the world's best PMHNP-BC exam preparation assistant.
+You provide concise, accurate, and engaging responses about ${topic}.
+Keep responses brief and conversational.
+`,
         },
         {
           role: 'user',
           content: message,
         },
       ],
-      max_tokens: 150,
+      max_tokens: 500,
     });
 
     return (
