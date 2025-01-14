@@ -235,6 +235,36 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     return null;
   };
 
+  const getCurrentSlideContent = () => {
+    if (topic.type === 'slides' && topic.slides) {
+      return topic.slides[currentSlideIndex].content;
+    }
+    if (topic.type === 'quiz' && quiz.data) {
+      const questionIndex = Math.floor(currentSlideIndex / 3);
+      const slideType = currentSlideIndex % 3;
+      const question = quiz.data.questions[questionIndex];
+
+      switch (slideType) {
+        case 0: // Prompt
+          return `Question ${question.questionNumber}: ${question.content.prompt.text}`;
+        case 1: // Choices
+          return `Question ${
+            question.questionNumber
+          } choices: ${question.content.answers
+            .map((a) => a.content.text)
+            .join(' | ')}`;
+        case 2: // Explanation
+          const correctAnswer = question.content.answers.find(
+            (a) => a.isCorrect
+          );
+          return `Question ${question.questionNumber} explanation: ${
+            correctAnswer?.content.text
+          } - ${question.content.explanation?.text ?? ''}`;
+      }
+    }
+    return undefined;
+  };
+
   if (topic.type === 'quiz' && quiz.isLoading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center">
@@ -351,7 +381,8 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
       </div>
 
       <StoryChat
-        topicId={topic.id}
+        topic={topic}
+        currentSlideContent={getCurrentSlideContent()}
         isOpen={showChat}
         onClose={() => setShowChat(false)}
       />
