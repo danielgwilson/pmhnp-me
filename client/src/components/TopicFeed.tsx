@@ -28,7 +28,11 @@ export const TopicFeed: FC<TopicFeedProps> = ({
   );
 
   const handleImageError = (topicId: string) => {
-    setFailedImages((prev) => new Set([...prev, topicId]));
+    setFailedImages((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(topicId);
+      return newSet;
+    });
   };
 
   const handleDoubleTap = (topicId: string, e: React.MouseEvent) => {
