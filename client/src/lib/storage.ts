@@ -1,10 +1,14 @@
 const HISTORY_KEY = 'pmhnp-bc-history';
 const MESSAGE_COUNT_KEY = 'pmhnp-bc-message-counts';
 const LIKES_KEY = 'pmhnp-bc-likes';
+const SLIDE_POSITION_KEY = 'story-slide-position';
 
 export function addToHistory(topicId: string) {
   const history = getHistory();
-  const updatedHistory = [topicId, ...history.filter(id => id !== topicId)].slice(0, 20);
+  const updatedHistory = [
+    topicId,
+    ...history.filter((id) => id !== topicId),
+  ].slice(0, 20);
   localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
 }
 
@@ -59,3 +63,18 @@ export function toggleLike(topicId: string) {
     return 0;
   }
 }
+
+export const saveSlidePosition = (topicId: string, slideIndex: number) => {
+  const positions = JSON.parse(
+    localStorage.getItem(SLIDE_POSITION_KEY) ?? '{}'
+  );
+  positions[topicId] = slideIndex;
+  localStorage.setItem(SLIDE_POSITION_KEY, JSON.stringify(positions));
+};
+
+export const getSlidePosition = (topicId: string): number => {
+  const positions = JSON.parse(
+    localStorage.getItem(SLIDE_POSITION_KEY) ?? '{}'
+  );
+  return positions[topicId] ?? 0;
+};

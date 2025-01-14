@@ -7,6 +7,7 @@ interface StoryProgressProps {
   current: number;
   onComplete?: () => void;
   isPaused?: boolean;
+  autoProgress?: boolean;
 }
 
 const PROGRESS_DURATION = 5000; // 5 seconds per slide
@@ -18,6 +19,7 @@ export const StoryProgress: FC<StoryProgressProps> = ({
   current,
   onComplete,
   isPaused = false,
+  autoProgress = false,
 }) => {
   const [progress, setProgress] = useState(0);
   const completedRef = useRef(false);
@@ -29,14 +31,15 @@ export const StoryProgress: FC<StoryProgressProps> = ({
   }, [current]);
 
   useEffect(() => {
-    // Don't start/continue timer if paused
+    // Don't continue timer if paused
     if (isPaused) return;
 
     const timer = setInterval(() => {
       setProgress((prev) => {
         const next = Math.min(100, prev + PROGRESS_STEP);
 
-        if (next >= 100 && !completedRef.current) {
+        // Only auto-complete if autoProgress is enabled
+        if (next >= 100 && !completedRef.current && autoProgress) {
           completedRef.current = true;
           clearInterval(timer);
           if (onComplete) {
@@ -50,7 +53,7 @@ export const StoryProgress: FC<StoryProgressProps> = ({
     return () => {
       clearInterval(timer);
     };
-  }, [current, onComplete, isPaused]); // Add isPaused to dependencies
+  }, [current, onComplete, isPaused, autoProgress]);
 
   return (
     <div className="w-full px-4 flex gap-1">

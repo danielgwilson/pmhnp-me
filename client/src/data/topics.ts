@@ -14,6 +14,8 @@ export interface Topic {
   type: TopicType;
   slides?: TopicSlide[];
   quizId?: string;
+  autoProgress?: boolean;
+  resumable?: boolean;
 }
 
 export const mockTopics: Topic[] = [
@@ -25,6 +27,8 @@ export const mockTopics: Topic[] = [
       'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000',
     type: 'quiz',
     quizId: 'pmhnp-bc',
+    autoProgress: false,
+    resumable: true,
   },
   {
     id: 'psychiatric-assessment',
@@ -32,6 +36,7 @@ export const mockTopics: Topic[] = [
     description: 'Core principles of psychiatric assessment and diagnosis',
     imageUrl: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85',
     type: 'slides',
+    autoProgress: true,
     slides: [
       {
         id: '1',

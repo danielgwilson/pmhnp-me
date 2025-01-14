@@ -10,7 +10,13 @@ import { useQuery } from '@tanstack/react-query';
 import { loadQuiz } from '@/lib/quiz-loader';
 import { QuizChoice } from './quiz/quiz-choice';
 import { cn } from '@/lib/utils';
-import { getLikes, toggleLike, getMessageCount } from '@/lib/storage';
+import {
+  getLikes,
+  toggleLike,
+  getMessageCount,
+  saveSlidePosition,
+  getSlidePosition,
+} from '@/lib/storage';
 import { useQuizProgress } from '@/hooks/use-quiz-progress';
 
 interface TopicStoryProps {
@@ -20,7 +26,9 @@ interface TopicStoryProps {
 
 export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
   const [_, setLocation] = useLocation();
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(
+    topic.resumable ? getSlidePosition(topic.id) : 0
+  );
   const [showChat, setShowChat] = useState(false);
   const [likeCount, setLikeCount] = useState(getLikes(topic.id));
   const [messageCount, setMessageCount] = useState(getMessageCount(topic.id));
@@ -34,7 +42,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
       return topic.slides.length;
     }
     if (topic.type === 'quiz' && quiz.data) {
-      return quiz.data.questions.length * 3;
+      return quiz.data.questions.length;
     }
     return 0;
   };
@@ -265,6 +273,12 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     return undefined;
   };
 
+  useEffect(() => {
+    if (topic.resumable) {
+      saveSlidePosition(topic.id, currentSlideIndex);
+    }
+  }, [topic.id, topic.resumable, currentSlideIndex]);
+
   if (topic.type === 'quiz' && quiz.isLoading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center">
@@ -299,6 +313,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
             current={currentSlideIndex}
             onComplete={handleProgressComplete}
             isPaused={showChat}
+            autoProgress={topic.autoProgress}
           />
         </div>
 
