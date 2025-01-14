@@ -1,12 +1,17 @@
-import express, { type Request, Response, NextFunction } from 'express';
+import express from 'express';
+import cors from 'cors';
 import { registerRoutes } from './routes';
-import { setupVite, serveStatic, log } from './vite';
 import { config } from './config/env';
+import chalk from 'chalk';
+import { setupVite, serveStatic } from './vite';
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Request logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -30,35 +35,40 @@ app.use((req, res, next) => {
         logLine = logLine.slice(0, 79) + '…';
       }
 
-      log(logLine);
+      log(chalk.dim(logLine));
     }
   });
 
   next();
 });
 
+// Register routes
+const server = registerRoutes(app);
+
+// Startup logging
+const log = console.log;
+log('\n🚀', chalk.bold('Starting server...'));
+log('📍', chalk.dim('Environment:'), chalk.cyan(config.env));
+log(
+  '🔑',
+  chalk.dim('OpenAI API:'),
+  config.openai.apiKey ? chalk.green('Configured') : chalk.red('Missing')
+);
+log('🌐', chalk.dim('Port:'), chalk.yellow(config.port));
+
+// Setup Vite or static serving
 (async () => {
-  const server = registerRoutes(app);
-
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || 'Internal Server Error';
-
-    res.status(status).json({ message });
-    throw err;
-  });
-
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
   if (config.env === 'development') {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // Use configured port
-  server.listen(config.port, '0.0.0.0', () => {
-    log(`serving on port ${config.port}`);
+  // Start server
+  server.listen(config.port, () => {
+    log(
+      '✨',
+      chalk.green.bold(`Server ready at http://localhost:${config.port}`)
+    );
   });
 })();
