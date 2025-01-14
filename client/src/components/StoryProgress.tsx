@@ -55,20 +55,51 @@ export const StoryProgress: FC<StoryProgressProps> = ({
     };
   }, [current, onComplete, isPaused, autoProgress]);
 
+  // Calculate overall progress including completed slides
+  const overallProgress = ((current + progress / 100) / total) * 100;
+
   return (
-    <div className="w-full px-4 flex gap-1">
-      {Array.from({ length: total }).map((_, i) => (
-        <Progress
-          key={i}
-          value={i === current ? progress : i < current ? 100 : 0}
-          className={cn(
-            'h-1',
-            i === current || i < current
-              ? 'bg-gray-600 [&>div]:bg-white'
-              : 'bg-gray-600'
-          )}
-        />
-      ))}
+    <div className="w-full px-4">
+      {/* Show continuous bar on mobile for long quizzes */}
+      <div className="md:hidden">
+        {total > 5 ? (
+          <Progress
+            value={overallProgress}
+            className="h-1 bg-gray-600 [&>div]:bg-white"
+          />
+        ) : (
+          <div className="flex gap-1">
+            {Array.from({ length: total }).map((_, i) => (
+              <Progress
+                key={i}
+                value={i === current ? progress : i < current ? 100 : 0}
+                className={cn(
+                  'h-1',
+                  i === current || i < current
+                    ? 'bg-gray-600 [&>div]:bg-white'
+                    : 'bg-gray-600'
+                )}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Always show segmented bars on desktop */}
+      <div className="hidden md:flex gap-1">
+        {Array.from({ length: total }).map((_, i) => (
+          <Progress
+            key={i}
+            value={i === current ? progress : i < current ? 100 : 0}
+            className={cn(
+              'h-1',
+              i === current || i < current
+                ? 'bg-gray-600 [&>div]:bg-white'
+                : 'bg-gray-600'
+            )}
+          />
+        ))}
+      </div>
     </div>
   );
 };

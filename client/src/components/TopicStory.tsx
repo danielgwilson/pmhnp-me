@@ -325,7 +325,11 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
         <div className="px-4">
           <StoryProgress
             total={getTotalSlides()}
-            current={currentSlideIndex}
+            current={
+              topic.type === 'quiz'
+                ? Math.floor(currentSlideIndex / 3)
+                : currentSlideIndex
+            }
             onComplete={handleProgressComplete}
             isPaused={showChat}
             autoProgress={topic.autoProgress}
