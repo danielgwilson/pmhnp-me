@@ -27,7 +27,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<string, string>
   >({});
-  const [direction, setDirection] = useState<'left' | 'right'>('left');
+  const [navType, setNavType] = useState<'forward' | 'backward'>('forward');
 
   const quiz = useQuery({
     queryKey: ['quiz', topic.quizId],
@@ -62,7 +62,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
 
   const handlePrevSlide = () => {
     if (currentSlideIndex > 0) {
-      setDirection('right');
+      setNavType('backward');
       if (topic.type === 'quiz' && quiz.data) {
         const questionIndex = Math.floor(currentSlideIndex / 3);
         const slideType = currentSlideIndex % 3;
@@ -81,7 +81,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
   };
 
   const handleNextSlide = () => {
-    setDirection('left');
+    setNavType('forward');
     if (topic.type === 'slides' && topic.slides) {
       if (currentSlideIndex < topic.slides.length - 1) {
         setCurrentSlideIndex(currentSlideIndex + 1);
@@ -116,7 +116,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     saveAnswer(questionId, answerId, isCorrect);
 
     setTimeout(() => {
-      setDirection('left');
+      setNavType('forward');
       const currentQuestionIndex = Math.floor(currentSlideIndex / 3);
       const nextSlideIndex = currentQuestionIndex * 3 + 2;
       setCurrentSlideIndex(nextSlideIndex);
@@ -268,20 +268,26 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
 
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-full max-w-2xl mx-auto px-4">
-              <AnimatePresence mode="wait" initial={false}>
+              <AnimatePresence mode="wait" initial={false} custom={navType}>
                 <motion.div
                   key={currentSlideIndex}
-                  initial={{
-                    opacity: 0,
-                    x: direction === 'left' ? 100 : -100,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    x: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    x: direction === 'left' ? -100 : 100,
+                  custom={navType}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  variants={{
+                    initial: (navType: 'forward' | 'backward') => ({
+                      opacity: 0,
+                      x: navType === 'forward' ? 100 : -100,
+                    }),
+                    animate: {
+                      opacity: 1,
+                      x: 0,
+                    },
+                    exit: (navType: 'forward' | 'backward') => ({
+                      opacity: 0,
+                      x: navType === 'forward' ? -100 : 100,
+                    }),
                   }}
                   transition={{
                     duration: 0.3,
