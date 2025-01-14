@@ -40,6 +40,23 @@ export const StoryChat: FC<StoryChatProps> = ({
   const [input, setInput] = useState('');
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Focus input when chat opens
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [isOpen]);
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   // Load chat history from localStorage
   useEffect(() => {
@@ -95,8 +112,8 @@ export const StoryChat: FC<StoryChatProps> = ({
     setInput('');
     incrementMessageCount(topic.id);
 
-    // Focus input after sending
-    inputRef.current?.focus();
+    // Focus input after sending with a slight delay
+    setTimeout(() => inputRef.current?.focus(), 0);
 
     try {
       const response = await chatMutation.mutateAsync(input);
@@ -105,6 +122,8 @@ export const StoryChat: FC<StoryChatProps> = ({
         { text: response, isUser: false, timestamp: Date.now() },
       ]);
       incrementMessageCount(topic.id);
+      // Ensure focus after response
+      setTimeout(() => inputRef.current?.focus(), 0);
     } catch (error) {
       // Error is handled by mutation error callback
     }
@@ -149,6 +168,7 @@ export const StoryChat: FC<StoryChatProps> = ({
                   </div>
                 </div>
               )}
+              <div ref={messagesEndRef} />
             </div>
 
             <div className="p-4 border-t flex gap-2">

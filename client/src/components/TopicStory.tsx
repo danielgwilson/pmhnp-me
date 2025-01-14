@@ -345,7 +345,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
                     duration: 0.3,
                     ease: 'easeInOut',
                   }}
-                  className="z-20 relative pointer-events-none">
+                  className="z-20 relative pointer-events-auto">
                   {renderContent()}
                 </motion.div>
               </AnimatePresence>
