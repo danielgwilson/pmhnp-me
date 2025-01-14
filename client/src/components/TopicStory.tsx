@@ -268,6 +268,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
             total={getTotalSlides()}
             current={currentSlideIndex}
             onComplete={handleProgressComplete}
+            isPaused={showChat}
           />
         </div>
 
@@ -349,15 +350,11 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
         </div>
       </div>
 
-      <AnimatePresence>
-        {showChat && (
-          <StoryChat
-            topicId={topic.id}
-            isOpen={showChat}
-            onClose={() => setShowChat(false)}
-          />
-        )}
-      </AnimatePresence>
+      <StoryChat
+        topicId={topic.id}
+        isOpen={showChat}
+        onClose={() => setShowChat(false)}
+      />
     </div>
   );
 };

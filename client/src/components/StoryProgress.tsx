@@ -1,10 +1,12 @@
 import { FC, useEffect, useState, useRef } from 'react';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface StoryProgressProps {
   total: number;
   current: number;
   onComplete?: () => void;
+  isPaused?: boolean;
 }
 
 const PROGRESS_DURATION = 5000; // 5 seconds per slide
@@ -15,13 +17,20 @@ export const StoryProgress: FC<StoryProgressProps> = ({
   total,
   current,
   onComplete,
+  isPaused = false,
 }) => {
   const [progress, setProgress] = useState(0);
   const completedRef = useRef(false);
 
   useEffect(() => {
+    // Reset progress when current slide changes
     setProgress(0);
     completedRef.current = false;
+  }, [current]);
+
+  useEffect(() => {
+    // Don't start/continue timer if paused
+    if (isPaused) return;
 
     const timer = setInterval(() => {
       setProgress((prev) => {
@@ -40,9 +49,8 @@ export const StoryProgress: FC<StoryProgressProps> = ({
 
     return () => {
       clearInterval(timer);
-      completedRef.current = false;
     };
-  }, [current, onComplete]);
+  }, [current, onComplete, isPaused]); // Add isPaused to dependencies
 
   return (
     <div className="w-full px-4 flex gap-1">
@@ -50,7 +58,12 @@ export const StoryProgress: FC<StoryProgressProps> = ({
         <Progress
           key={i}
           value={i === current ? progress : i < current ? 100 : 0}
-          className="h-1 bg-gray-600"
+          className={cn(
+            'h-1',
+            i === current || i < current
+              ? 'bg-gray-600 [&>div]:bg-white'
+              : 'bg-gray-600'
+          )}
         />
       ))}
     </div>

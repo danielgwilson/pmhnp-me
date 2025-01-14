@@ -1,9 +1,12 @@
+'use client';
+
 import { FC, useState } from 'react';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetPortal,
 } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -45,9 +48,9 @@ export const StoryChat: FC<StoryChatProps> = ({ topicId, isOpen, onClose }) => {
     },
     onError: (error) => {
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to send message. Please try again.',
       });
       console.error('Chat error:', error);
     },
@@ -57,13 +60,13 @@ export const StoryChat: FC<StoryChatProps> = ({ topicId, isOpen, onClose }) => {
     if (!input.trim() || chatMutation.isPending) return;
 
     const userMessage = { text: input, isUser: true };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
     incrementMessageCount(topicId);
 
     try {
       const response = await chatMutation.mutateAsync(input);
-      setMessages(prev => [...prev, { text: response, isUser: false }]);
+      setMessages((prev) => [...prev, { text: response, isUser: false }]);
       incrementMessageCount(topicId);
     } catch (error) {
       // Error is handled by mutation error callback
@@ -71,57 +74,58 @@ export const StoryChat: FC<StoryChatProps> = ({ topicId, isOpen, onClose }) => {
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose} modal={false}>
-      <SheetContent 
-        side="bottom" 
-        className="h-[80vh] p-0 bg-background border-t"
-      >
-        <div className="flex flex-col h-full">
-          <SheetHeader className="h-12 flex-shrink-0 border-b p-4">
-            <SheetTitle className="text-lg">Chat</SheetTitle>
-          </SheetHeader>
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetPortal>
+        <SheetContent
+          side="bottom"
+          className="h-[80vh] p-0 bg-background border-t">
+          <div className="flex flex-col h-full">
+            <SheetHeader className="h-12 flex-shrink-0 border-b p-4">
+              <SheetTitle className="text-lg">Chat</SheetTitle>
+            </SheetHeader>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((message, i) => (
-              <div
-                key={i}
-                className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-              >
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.map((message, i) => (
                 <div
-                  className={`rounded-2xl px-4 py-2 max-w-[80%] ${
-                    message.isUser
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
-                  }`}
-                >
-                  {message.text}
+                  key={i}
+                  className={`flex ${
+                    message.isUser ? 'justify-end' : 'justify-start'
+                  }`}>
+                  <div
+                    className={`rounded-2xl px-4 py-2 max-w-[80%] ${
+                      message.isUser
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
+                    }`}>
+                    {message.text}
+                  </div>
                 </div>
-              </div>
-            ))}
-            {chatMutation.isPending && (
-              <div className="flex justify-start">
-                <div className="rounded-2xl px-4 py-2 bg-muted animate-pulse">
-                  Typing...
+              ))}
+              {chatMutation.isPending && (
+                <div className="flex justify-start">
+                  <div className="rounded-2xl px-4 py-2 bg-muted animate-pulse">
+                    Typing...
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          <div className="p-4 flex gap-2 border-t">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Message..."
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              className="bg-transparent"
-              disabled={chatMutation.isPending}
-            />
-            <Button onClick={handleSend} disabled={chatMutation.isPending}>
-              Send
-            </Button>
+            <div className="p-4 flex gap-2 border-t">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Message..."
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                className="bg-transparent"
+                disabled={chatMutation.isPending}
+              />
+              <Button onClick={handleSend} disabled={chatMutation.isPending}>
+                Send
+              </Button>
+            </div>
           </div>
-        </div>
-      </SheetContent>
+        </SheetContent>
+      </SheetPortal>
     </Sheet>
   );
 };
