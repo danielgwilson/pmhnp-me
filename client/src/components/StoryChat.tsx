@@ -6,7 +6,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetPortal,
+  SheetClose,
 } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,9 @@ import { incrementMessageCount } from '@/lib/storage';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { Topic } from '@/data/topics';
+import { AnimatePresence, motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
 
 interface StoryChatProps {
   topic: Topic;
@@ -131,67 +134,51 @@ export const StoryChat: FC<StoryChatProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetPortal>
-        <SheetContent
-          side="bottom"
-          className="h-[80vh] p-0 bg-background border-t">
-          <div className="flex flex-col h-full">
-            <SheetHeader className="h-12 flex-shrink-0 border-b p-4">
-              <SheetTitle className="text-lg">Chat History</SheetTitle>
-            </SheetHeader>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.map((message, i) => (
-                <div
-                  key={message.timestamp}
-                  className={`flex ${
-                    message.isUser ? 'justify-end' : 'justify-start'
-                  }`}>
-                  <div
-                    className={`rounded-2xl px-4 py-2 max-w-[80%] ${
-                      message.isUser
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
-                    }`}>
-                    {message.text}
-                  </div>
-                </div>
-              ))}
-              {chatMutation.isPending && (
-                <div className="flex justify-start">
-                  <div className="bg-muted rounded-2xl px-4 py-2">
-                    <div className="w-12 h-6 flex items-center justify-center space-x-1">
-                      <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce [animation-delay:0.2s]" />
-                      <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce [animation-delay:0.4s]" />
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-
-            <div className="p-4 border-t flex gap-2">
-              <Input
-                ref={inputRef}
-                placeholder="Ask a question..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                disabled={chatMutation.isPending}
-              />
-              <Button onClick={handleSend} disabled={chatMutation.isPending}>
-                Send
-              </Button>
-            </div>
+      <SheetContent
+        side="bottom"
+        className="h-[100dvh] md:h-[85vh] p-0 bg-background border-t flex flex-col">
+        <SheetHeader className="px-4 py-3 border-b">
+          <SheetTitle>Chat</SheetTitle>
+        </SheetHeader>
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-4 space-y-4">
+            {messages.map((message, i) => (
+              <div
+                key={i}
+                className={cn(
+                  'p-4 rounded-lg max-w-[85%]',
+                  message.isUser
+                    ? 'bg-primary text-primary-foreground ml-auto'
+                    : 'bg-muted'
+                )}>
+                <p className="text-sm">{message.text}</p>
+              </div>
+            ))}
+            {chatMutation.isPending && (
+              <div className="bg-muted p-4 rounded-lg max-w-[85%] animate-pulse">
+                <p className="text-sm">Typing...</p>
+              </div>
+            )}
           </div>
-        </SheetContent>
-      </SheetPortal>
+        </div>
+
+        <div className="p-4 border-t bg-background">
+          <form onSubmit={handleSend} className="flex gap-2">
+            <Input
+              ref={inputRef}
+              placeholder="Ask a question..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="flex-1"
+            />
+            <Button
+              type="submit"
+              disabled={chatMutation.isPending || !input.trim()}>
+              Send
+            </Button>
+          </form>
+        </div>
+      </SheetContent>
     </Sheet>
   );
 };
