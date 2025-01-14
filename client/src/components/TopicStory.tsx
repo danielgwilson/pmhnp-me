@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'wouter';
 import { Topic } from '@/data/topics';
 import { StoryProgress } from './StoryProgress';
@@ -28,6 +28,24 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     Record<string, string>
   >({});
   const [navType, setNavType] = useState<'forward' | 'backward'>('forward');
+
+  const getTotalSlides = () => {
+    if (topic.type === 'slides' && topic.slides) {
+      return topic.slides.length;
+    }
+    if (topic.type === 'quiz' && quiz.data) {
+      return quiz.data.questions.length * 3;
+    }
+    return 0;
+  };
+
+  const handleProgressComplete = useCallback(() => {
+    if (currentSlideIndex === getTotalSlides() - 1) {
+      onClose();
+    } else {
+      handleNextSlide();
+    }
+  }, [currentSlideIndex, getTotalSlides, onClose]);
 
   const quiz = useQuery({
     queryKey: ['quiz', topic.quizId],
@@ -85,12 +103,20 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     if (topic.type === 'slides' && topic.slides) {
       if (currentSlideIndex < topic.slides.length - 1) {
         setCurrentSlideIndex(currentSlideIndex + 1);
+      } else {
+        onClose();
       }
     } else if (topic.type === 'quiz' && quiz.data) {
       const currentQuestion =
         quiz.data.questions[Math.floor(currentSlideIndex / 3)];
       const slideType = currentSlideIndex % 3;
       const hasAnswer = selectedAnswers[currentQuestion.id];
+      const isLastSlide = currentSlideIndex === getTotalSlides() - 1;
+
+      if (isLastSlide) {
+        onClose();
+        return;
+      }
 
       if (
         slideType === 0 || // Prompt -> Choices
@@ -209,16 +235,6 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     return null;
   };
 
-  const getTotalSlides = () => {
-    if (topic.type === 'slides' && topic.slides) {
-      return topic.slides.length;
-    }
-    if (topic.type === 'quiz' && quiz.data) {
-      return quiz.data.questions.length * 3;
-    }
-    return 0;
-  };
-
   if (topic.type === 'quiz' && quiz.isLoading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center">
@@ -250,7 +266,8 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
         <div className="px-4">
           <StoryProgress
             total={getTotalSlides()}
-            current={currentSlideIndex + 1}
+            current={currentSlideIndex}
+            onComplete={handleProgressComplete}
           />
         </div>
 
@@ -262,7 +279,11 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
             />
             <div
               className="absolute inset-y-0 right-0 w-3/4 pointer-events-auto"
-              onClick={handleNextSlide}
+              onClick={
+                currentSlideIndex === getTotalSlides() - 1
+                  ? onClose
+                  : handleNextSlide
+              }
             />
           </div>
 

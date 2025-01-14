@@ -7,7 +7,15 @@ interface StoryProgressProps {
   onComplete?: () => void;
 }
 
-export const StoryProgress: FC<StoryProgressProps> = ({ total, current, onComplete }) => {
+const PROGRESS_DURATION = 5000; // 5 seconds per slide
+const PROGRESS_INTERVAL = 50; // Update every 50ms
+const PROGRESS_STEP = (100 * PROGRESS_INTERVAL) / PROGRESS_DURATION;
+
+export const StoryProgress: FC<StoryProgressProps> = ({
+  total,
+  current,
+  onComplete,
+}) => {
   const [progress, setProgress] = useState(0);
   const completedRef = useRef(false);
 
@@ -17,20 +25,18 @@ export const StoryProgress: FC<StoryProgressProps> = ({ total, current, onComple
 
     const timer = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
+        const next = Math.min(100, prev + PROGRESS_STEP);
+
+        if (next >= 100 && !completedRef.current) {
+          completedRef.current = true;
           clearInterval(timer);
-          if (!completedRef.current) {
-            completedRef.current = true;
-            // Schedule onComplete callback to avoid state updates during render
-            if (onComplete) {
-              setTimeout(onComplete, 0);
-            }
+          if (onComplete) {
+            onComplete();
           }
-          return 100;
         }
-        return prev + 1;
+        return next;
       });
-    }, 50);
+    }, PROGRESS_INTERVAL);
 
     return () => {
       clearInterval(timer);
