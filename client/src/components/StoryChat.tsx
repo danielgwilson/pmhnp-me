@@ -136,12 +136,14 @@ export const StoryChat: FC<StoryChatProps> = ({
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent
         side="bottom"
-        className="h-[100dvh] md:h-[85vh] p-0 bg-background border-t flex flex-col">
-        <SheetHeader className="px-4 py-3 border-b">
+        className="h-[100dvh] md:h-[85vh] p-0 bg-background flex flex-col">
+        <SheetHeader className="px-4 py-3 border-b flex-shrink-0">
           <SheetTitle>Chat</SheetTitle>
         </SheetHeader>
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-4">
+
+        {/* Scrollable messages container */}
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          <div className="flex flex-col justify-end min-h-full p-4 space-y-4">
             {messages.map((message, i) => (
               <div
                 key={i}
@@ -151,7 +153,9 @@ export const StoryChat: FC<StoryChatProps> = ({
                     ? 'bg-primary text-primary-foreground ml-auto'
                     : 'bg-muted'
                 )}>
-                <p className="text-sm">{message.text}</p>
+                <p className="text-sm whitespace-pre-wrap break-words">
+                  {message.text}
+                </p>
               </div>
             ))}
             {chatMutation.isPending && (
@@ -162,7 +166,8 @@ export const StoryChat: FC<StoryChatProps> = ({
           </div>
         </div>
 
-        <div className="p-4 border-t bg-background">
+        {/* Input area - fixed at bottom */}
+        <div className="p-4 border-t bg-background flex-shrink-0">
           <form onSubmit={handleSend} className="flex gap-2">
             <Input
               ref={inputRef}
