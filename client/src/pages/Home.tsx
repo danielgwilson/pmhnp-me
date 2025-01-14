@@ -12,7 +12,7 @@ export const Home: FC<HomeProps> = ({ setActiveStory }) => {
 
   return (
     <div className="max-w-2xl mx-auto pb-20">
-      <TopicCircles topics={topicCircles} />
+      <TopicCircles topics={topicCircles} setActiveStory={setActiveStory} />
       <TopicFeed topics={feedTopics} setActiveStory={setActiveStory} />
     </div>
   );
