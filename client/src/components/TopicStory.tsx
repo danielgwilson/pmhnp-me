@@ -4,7 +4,7 @@ import { Topic } from '@/data/topics';
 import { StoryProgress } from './StoryProgress';
 import { StoryChat } from './StoryChat';
 import { Button } from './ui/button';
-import { X, Heart, MessageCircle } from 'lucide-react';
+import { X, Heart, MessageCircle, Shuffle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { loadQuiz } from '@/lib/quiz-loader';
@@ -36,6 +36,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     Record<string, string>
   >({});
   const [navType, setNavType] = useState<'forward' | 'backward'>('forward');
+  const [isShuffled, setIsShuffled] = useState(false);
 
   const getTotalSlides = () => {
     if (topic.type === 'slides' && topic.slides) {
@@ -106,34 +107,40 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     }
   };
 
+  const getNextSlideIndex = (current: number) => {
+    const total = getTotalSlides();
+    if (!isShuffled) return current + 1;
+
+    // If we're on an explanation slide (slideType === 2), pick a random next question
+    if (current % 3 === 2) {
+      const currentQuestion = Math.floor(current / 3);
+      const remainingQuestions = Array.from(
+        { length: total },
+        (_, i) => i * 3
+      ).filter((i) => i !== currentQuestion * 3);
+
+      return remainingQuestions[
+        Math.floor(Math.random() * remainingQuestions.length)
+      ];
+    }
+
+    // Otherwise just go to the next slide in sequence
+    return current + 1;
+  };
+
   const handleNextSlide = () => {
     setNavType('forward');
-    if (topic.type === 'slides' && topic.slides) {
-      if (currentSlideIndex < topic.slides.length - 1) {
-        setCurrentSlideIndex(currentSlideIndex + 1);
-      } else {
-        onClose();
-      }
-    } else if (topic.type === 'quiz' && quiz.data) {
-      const currentQuestion =
-        quiz.data.questions[Math.floor(currentSlideIndex / 3)];
-      const slideType = currentSlideIndex % 3;
-      const hasAnswer = selectedAnswers[currentQuestion.id];
-      const isLastSlide = currentSlideIndex === getTotalSlides() - 1;
 
-      if (isLastSlide) {
-        onClose();
-        return;
-      }
+    if (currentSlideIndex === getTotalSlides() - 1) {
+      onClose();
+      return;
+    }
 
-      if (
-        slideType === 0 || // Prompt -> Choices
-        (slideType === 1 && hasAnswer) || // Choices -> Explanation (if answered)
-        (slideType === 2 &&
-          Math.floor(currentSlideIndex / 3) < quiz.data.questions.length - 1) // Explanation -> Next Question
-      ) {
-        setCurrentSlideIndex(currentSlideIndex + 1);
-      }
+    const nextIndex = getNextSlideIndex(currentSlideIndex);
+    if (nextIndex < getTotalSlides()) {
+      setCurrentSlideIndex(nextIndex);
+    } else {
+      onClose();
     }
   };
 
@@ -158,8 +165,10 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
   };
 
   const renderContent = () => {
+    const actualIndex = getActualSlideIndex(currentSlideIndex);
+
     if (topic.type === 'slides' && topic.slides) {
-      const slide = topic.slides[currentSlideIndex];
+      const slide = topic.slides[actualIndex];
       return (
         <div className="space-y-4 select-none">
           <p className="text-lg">{slide.content}</p>
@@ -175,8 +184,8 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     }
 
     if (topic.type === 'quiz' && quiz.data) {
-      const questionIndex = Math.floor(currentSlideIndex / 3);
-      const slideType = currentSlideIndex % 3;
+      const questionIndex = Math.floor(actualIndex / 3);
+      const slideType = actualIndex % 3;
       const question = quiz.data.questions[questionIndex];
       const selectedAnswer = selectedAnswers[question.id];
 
@@ -278,6 +287,12 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
       saveSlidePosition(topic.id, currentSlideIndex);
     }
   }, [topic.id, topic.resumable, currentSlideIndex]);
+
+  // Get the actual slide index based on shuffle state
+  const getActualSlideIndex = (index: number) => {
+    if (!isShuffled) return index;
+    return index;
+  };
 
   if (topic.type === 'quiz' && quiz.isLoading) {
     return (
@@ -384,6 +399,18 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
               onClick={() => setShowChat(true)}
               className="hover:opacity-70 transition-opacity z-20">
               <MessageCircle className="w-6 h-6 text-white" />
+            </button>
+            <button
+              onClick={() => setIsShuffled(!isShuffled)}
+              className="hover:opacity-70 transition-opacity z-20">
+              <Shuffle
+                className={cn(
+                  'w-6 h-6',
+                  isShuffled
+                    ? 'text-blue-400 fill-blue-400'
+                    : 'text-white fill-none'
+                )}
+              />
             </button>
           </div>
 
