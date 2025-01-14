@@ -114,30 +114,41 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
     // If we're on an explanation slide (slideType === 2), pick a random next question
     if (current % 3 === 2) {
       const currentQuestion = Math.floor(current / 3);
+      // Get all question indices except the current one
       const remainingQuestions = Array.from(
         { length: total },
-        (_, i) => i * 3
-      ).filter((i) => i !== currentQuestion * 3);
+        (_, i) => i
+      ).filter((i) => i !== currentQuestion);
 
-      return remainingQuestions[
-        Math.floor(Math.random() * remainingQuestions.length)
-      ];
+      // If no more questions, we're done
+      if (remainingQuestions.length === 0) {
+        return total;
+      }
+
+      // Pick a random question and convert to the corresponding prompt slide index
+      const nextQuestion =
+        remainingQuestions[
+          Math.floor(Math.random() * remainingQuestions.length)
+        ];
+      return nextQuestion * 3;
     }
 
-    // Otherwise just go to the next slide in sequence
+    // Otherwise just go to the next slide in sequence (within current question)
     return current + 1;
   };
 
   const handleNextSlide = () => {
     setNavType('forward');
 
-    if (currentSlideIndex === getTotalSlides() - 1) {
+    const total = getTotalSlides();
+    // Only close if we're actually at the end
+    if (currentSlideIndex >= total * 3 - 1) {
       onClose();
       return;
     }
 
     const nextIndex = getNextSlideIndex(currentSlideIndex);
-    if (nextIndex < getTotalSlides()) {
+    if (nextIndex < total * 3) {
       setCurrentSlideIndex(nextIndex);
     } else {
       onClose();
