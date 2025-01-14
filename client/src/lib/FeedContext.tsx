@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 import { mockTopics, type Topic } from '@/data/topics';
 
 interface FeedContextType {
@@ -19,15 +25,23 @@ export function useFeed() {
 
 export function FeedProvider({ children }: { children: ReactNode }) {
   // Initialize state only once when the provider mounts
-  const [state] = useState(() => ({
-    feedTopics: [...mockTopics].sort(() => Math.random() - 0.5),
-    topicCircles: [...mockTopics].sort(() => Math.random() - 0.5).slice(0, 10),
-    recommendedTopics: [...mockTopics].sort(() => Math.random() - 0.5).slice(0, 5),
-  }));
+  const [state] = useState(() => {
+    // Separate quiz and regular topics
+    const quizTopics = mockTopics.filter((t) => t.type === 'quiz');
+    const regularTopics = mockTopics.filter((t) => t.type === 'slides');
 
-  return (
-    <FeedContext.Provider value={state}>
-      {children}
-    </FeedContext.Provider>
-  );
+    // Shuffle regular topics
+    const shuffledRegular = [...regularTopics].sort(() => Math.random() - 0.5);
+
+    return {
+      // Quiz first, then shuffled regular topics
+      feedTopics: [...quizTopics, ...shuffledRegular],
+      // Quiz first in circles, then some shuffled regular topics
+      topicCircles: [...quizTopics, ...shuffledRegular.slice(0, 9)],
+      // Random selection for recommended
+      recommendedTopics: [...shuffledRegular].slice(0, 5),
+    };
+  });
+
+  return <FeedContext.Provider value={state}>{children}</FeedContext.Provider>;
 }

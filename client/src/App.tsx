@@ -1,15 +1,17 @@
-import { Switch, Route } from "wouter";
-import { Home } from "@/pages/Home";
-import { Search } from "@/pages/Search";
-import { Profile } from "@/pages/Profile";
-import { Navigation } from "@/components/layout/Navigation";
-import { TopicStory } from "@/components/TopicStory";
-import { mockTopics } from "@/data/topics";
-import { ToastManager } from "@/components/AchievementToast";
-import { AnimatePresence } from "framer-motion";
-import { FeedProvider } from "@/lib/FeedContext";
+import { Switch, Route, useLocation } from 'wouter';
+import { Home } from '@/pages/Home';
+import { Search } from '@/pages/Search';
+import { Profile } from '@/pages/Profile';
+import { Navigation } from '@/components/layout/Navigation';
+import { TopicStory } from '@/components/TopicStory';
+import { mockTopics } from '@/data/topics';
+import { ToastManager } from '@/components/AchievementToast';
+import { AnimatePresence } from 'framer-motion';
+import { FeedProvider } from '@/lib/FeedContext';
 
 function App() {
+  const [_, setLocation] = useLocation();
+
   return (
     <FeedProvider>
       <>
@@ -21,7 +23,14 @@ function App() {
             <Route path="/story/:id">
               {(params) => {
                 const topic = mockTopics.find((t) => t.id === params.id);
-                return topic ? <TopicStory topic={topic} /> : null;
+                return topic ? (
+                  <TopicStory
+                    topic={topic}
+                    onClose={() => {
+                      setLocation('/');
+                    }}
+                  />
+                ) : null;
               }}
             </Route>
           </Switch>
