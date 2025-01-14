@@ -16,7 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Topic } from '@/data/topics';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { X } from 'lucide-react';
+import { X, SendHorizontal } from 'lucide-react';
 
 interface StoryChatProps {
   topic: Topic;
@@ -173,8 +173,10 @@ export const StoryChat: FC<StoryChatProps> = ({
             />
             <Button
               type="submit"
+              size="icon"
               disabled={chatMutation.isPending || !input.trim()}>
-              Send
+              <SendHorizontal className="h-4 w-4" />
+              <span className="sr-only">Send message</span>
             </Button>
           </form>
         </div>
