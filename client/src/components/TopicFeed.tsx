@@ -10,17 +10,25 @@ import { cn } from '@/lib/utils';
 interface TopicFeedProps {
   topics: Topic[];
   compact?: boolean;
+  setActiveStory: (id: string | null) => void;
 }
 
-export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
+export const TopicFeed: FC<TopicFeedProps> = ({
+  topics,
+  compact,
+  setActiveStory,
+}) => {
   const [_, setLocation] = useLocation();
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>(
-    topics.reduce((acc, topic) => ({ ...acc, [topic.id]: getLikes(topic.id) }), {})
+    topics.reduce(
+      (acc, topic) => ({ ...acc, [topic.id]: getLikes(topic.id) }),
+      {}
+    )
   );
 
   const handleImageError = (topicId: string) => {
-    setFailedImages(prev => new Set([...prev, topicId]));
+    setFailedImages((prev) => new Set([...prev, topicId]));
   };
 
   const handleDoubleTap = (topicId: string, e: React.MouseEvent) => {
@@ -31,13 +39,13 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
 
   const handleChatClick = (topicId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setLocation(`/story/${topicId}`);
+    setActiveStory(topicId);
   };
 
   const handleLikeClick = (topicId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const newLikeCount = toggleLike(topicId);
-    setLikeCounts(prev => ({ ...prev, [topicId]: newLikeCount }));
+    setLikeCounts((prev) => ({ ...prev, [topicId]: newLikeCount }));
   };
 
   return (
@@ -49,10 +57,9 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
           onClick={(e) => {
             handleDoubleTap(topic.id, e);
             if (e.detail === 1) {
-              setLocation(`/story/${topic.id}`);
+              setActiveStory(topic.id);
             }
-          }}
-        >
+          }}>
           <CardContent className="p-0">
             {!compact && (
               <div className="aspect-[4/3] relative">
@@ -65,10 +72,7 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
                     loading="lazy"
                   />
                 ) : (
-                  <ImageFallback 
-                    title={topic.title} 
-                    className="rounded-t-lg"
-                  />
+                  <ImageFallback title={topic.title} className="rounded-t-lg" />
                 )}
               </div>
             )}
@@ -76,21 +80,21 @@ export const TopicFeed: FC<TopicFeedProps> = ({ topics, compact }) => {
             {/* Instagram-style interaction buttons */}
             <div className="p-3">
               <div className="flex items-center gap-4 mb-2">
-                <button 
+                <button
                   onClick={(e) => handleLikeClick(topic.id, e)}
-                  className="hover:opacity-70 transition-opacity"
-                >
-                  <Heart 
+                  className="hover:opacity-70 transition-opacity">
+                  <Heart
                     className={cn(
-                      "w-6 h-6",
-                      likeCounts[topic.id] > 0 ? "fill-red-500 text-red-500" : "text-foreground"
+                      'w-6 h-6',
+                      likeCounts[topic.id] > 0
+                        ? 'fill-red-500 text-red-500'
+                        : 'text-foreground'
                     )}
                   />
                 </button>
-                <button 
+                <button
                   onClick={(e) => handleChatClick(topic.id, e)}
-                  className="hover:opacity-70 transition-opacity"
-                >
+                  className="hover:opacity-70 transition-opacity">
                   <MessageCircle className="w-6 h-6 text-foreground" />
                 </button>
               </div>
