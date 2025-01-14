@@ -288,7 +288,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
             />
           </div>
 
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-full max-w-2xl mx-auto px-4">
               <AnimatePresence mode="wait" initial={false} custom={navType}>
                 <motion.div
@@ -315,7 +315,7 @@ export const TopicStory = ({ topic, onClose }: TopicStoryProps) => {
                     duration: 0.3,
                     ease: 'easeInOut',
                   }}
-                  className="z-20 relative">
+                  className="z-20 relative pointer-events-none">
                   {renderContent()}
                 </motion.div>
               </AnimatePresence>
