@@ -4,36 +4,12 @@ export interface TopicSlide {
   imageUrl?: string;
 }
 
-export interface QuizAnswer {
-  id: string;
-  choice: string;
-  content: {
-    text: string;
-    html: string;
-  };
-  isCorrect: boolean;
-}
-
-export interface QuizQuestion {
-  prompt: {
-    text: string;
-    html: string;
-  };
-  answers: QuizAnswer[];
-  explanation: {
-    text: string;
-    html: string;
-  };
-}
-
 export interface Topic {
   id: string;
   title: string;
   description: string;
   imageUrl: string;
-  type?: 'standard' | 'quiz';
-  slides?: TopicSlide[];
-  questions?: QuizQuestion[];
+  slides: TopicSlide[];
 }
 
 export const mockTopics: Topic[] = [
@@ -42,7 +18,6 @@ export const mockTopics: Topic[] = [
     title: "Psychiatric Assessment",
     description: "Core principles of psychiatric assessment and diagnosis",
     imageUrl: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85",
-    type: 'standard',
     slides: [
       {
         id: "1",
@@ -63,7 +38,6 @@ export const mockTopics: Topic[] = [
     title: "Psychopharmacology",
     description: "Essential medications and their mechanisms",
     imageUrl: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
-    type: 'standard',
     slides: [
       {
         id: "1",
@@ -84,7 +58,6 @@ export const mockTopics: Topic[] = [
     title: "Mood Disorders",
     description: "Understanding and treating major depressive disorder and bipolar disorders",
     imageUrl: "https://images.unsplash.com/photo-1493836512294-502baa1986e2",
-    type: 'standard',
     slides: [
       {
         id: "1",
@@ -101,7 +74,6 @@ export const mockTopics: Topic[] = [
     title: "Anxiety Disorders",
     description: "Diagnosis and treatment of various anxiety disorders",
     imageUrl: "https://images.unsplash.com/photo-1474418397713-2f2090187d06",
-    type: 'standard',
     slides: [
       {
         id: "1",
@@ -122,7 +94,6 @@ export const mockTopics: Topic[] = [
     title: "Substance Use Disorders",
     description: "Assessment and treatment of substance use disorders",
     imageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef",
-    type: 'standard',
     slides: [
       {
         id: "1",
@@ -143,7 +114,6 @@ export const mockTopics: Topic[] = [
     title: "Therapeutic Communication",
     description: "Essential skills for effective patient interaction",
     imageUrl: "https://images.unsplash.com/photo-1573497620053-ea5300f94f21",
-    type: 'standard',
     slides: [
       {
         id: "1",
@@ -156,63 +126,6 @@ export const mockTopics: Topic[] = [
       {
         id: "3",
         content: "Non-verbal cues play a crucial role in patient interaction.",
-      }
-    ]
-  },
-  {
-    id: "pmhnp-practice-quiz-1",
-    title: "PMHNP Practice Quiz 1",
-    description: "Test your knowledge with practice questions for the PMHNP-BC exam",
-    imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173",
-    type: 'quiz',
-    questions: [
-      {
-        prompt: {
-          text: "The psychiatric-mental health nurse practitioner (PMHNP) presents data showing that a new approach to patient care has better outcomes. However, members of the staff are almost all in disagreement and spend considerable time arguing that the data are in error and providing rationales for maintaining the current approach. This is an example of:",
-          html: "<p>The psychiatric-mental health nurse practitioner (PMHNP) presents data showing that a new approach to patient care has better outcomes. However, members of the staff are almost all in disagreement and spend considerable time arguing that the data are in error and providing rationales for maintaining the current approach. This is an example of:</p>"
-        },
-        answers: [
-          {
-            id: "1",
-            choice: "a",
-            content: {
-              text: "Prejudice",
-              html: "<p>Prejudice</p>"
-            },
-            isCorrect: false
-          },
-          {
-            id: "2",
-            choice: "b",
-            content: {
-              text: "Aggression",
-              html: "<p>Aggression</p>"
-            },
-            isCorrect: false
-          },
-          {
-            id: "3",
-            choice: "c",
-            content: {
-              text: "Debate",
-              html: "<p>Debate</p>"
-            },
-            isCorrect: false
-          },
-          {
-            id: "4",
-            choice: "d",
-            content: {
-              text: "Group think",
-              html: "<p>Group think</p>"
-            },
-            isCorrect: true
-          }
-        ],
-        explanation: {
-          text: "This is an example of groupthink. Groupthink occurs when maintaining the status quo is more important to members of a group than making a reasoned or good decision.",
-          html: "<p>This is an example of groupthink. Groupthink occurs when maintaining the status quo is more important to members of a group than making a reasoned or good decision.</p>"
-        }
       }
     ]
   }
