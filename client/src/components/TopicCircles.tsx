@@ -29,7 +29,7 @@ export const TopicCircles: FC<TopicCirclesProps> = ({
   };
 
   const handleImageError = (topicId: string) => {
-    setFailedImages((prev) => new Set([...prev, topicId]));
+    setFailedImages((prev) => new Set(Array.from(prev).concat(topicId)));
   };
 
   const scroll = (direction: 'left' | 'right') => {
